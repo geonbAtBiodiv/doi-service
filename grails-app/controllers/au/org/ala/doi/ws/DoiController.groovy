@@ -357,7 +357,7 @@ class DoiController extends BasicWSController {
 
     @ApiOperation(
             value = "Search DOIs",
-            nickname = "search",
+            nickname = "doi/search",
             produces = "application/json",
             httpMethod = "GET",
             response = Doi,
