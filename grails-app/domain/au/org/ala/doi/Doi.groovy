@@ -1,10 +1,13 @@
 package au.org.ala.doi
 
+import au.org.ala.doi.ArrayType
 import au.org.ala.doi.util.DoiProvider
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
-import au.org.ala.doi.ArrayType
 import net.kaleidos.hibernate.usertype.JsonbMapType
+import org.springframework.beans.propertyeditors.UUIDEditor
+
+import java.beans.PropertyEditorSupport
 
 @ToString
 @EqualsAndHashCode
@@ -70,7 +73,18 @@ class Doi {
     }
 
     static searchable = {
-        only = ['title', 'authors', 'description', 'providerMetadata', 'applicationMetadata']
+        title boost: 2.0
+        authors boost: 2.0
+        description boost: 2.0
+        dateCreated excludeFromAll: true
+        lastUpdated excludeFromAll: true
+        fileSize excludeFromAll: true
+        displayTemplate excludeFromAll: true
+        active excludeFromAll: true
+        uuid converter: new UUIDEditor(), excludeFromAll: true
+        licence converter: new PropertyEditorSupport()
+
+        except = ['authorisedRoles', 'fileHash', 'version', 'contentType', 'userId']
     }
 
     def beforeValidate() {
