@@ -3,6 +3,7 @@ package au.org.ala.doi.ws
 import au.ala.org.ws.security.RequireApiKey
 import au.ala.org.ws.security.SkipApiKeyCheck
 import au.org.ala.doi.BasicWSController
+import au.org.ala.doi.DoiSearchService
 import au.org.ala.doi.MintResponse
 import au.org.ala.doi.SearchDoisCommand
 import au.org.ala.doi.exceptions.DoiNotFoundException
@@ -45,6 +46,7 @@ class DoiController extends BasicWSController {
 
     DoiService doiService
     Storage storage
+    DoiSearchService doiSearchService
 
     /**
      * Mint a new DOI. POST only. Must have an ALA API Key.
@@ -431,7 +433,7 @@ class DoiController extends BasicWSController {
             respond command
         }
         else {
-            ElasticSearchResult result = doiService.searchDois(command.max, command.offset, command.q, command.filters, command.sort, command.order)
+            ElasticSearchResult result = doiSearchService.searchDois(command.max, command.offset, command.q, command.filters, command.sort, command.order)
             def totalCount = result.total as int
 
             Map queryParams = [q:command.q, fq:command.fq]

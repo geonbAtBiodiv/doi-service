@@ -33,7 +33,6 @@ class DoiServiceSpec extends Specification implements ServiceUnitTest<DoiService
         service.andsService = Mock(AndsService)
         service.emailService = Mock(EmailService)
         service.storage = Mock(Storage)
-        service.elasticSearchService = Mock(ElasticSearchService)
     }
 
     def "mintDoi should throw IllegalArgumentException if no provider is given"() {
@@ -360,55 +359,6 @@ class DoiServiceSpec extends Specification implements ServiceUnitTest<DoiService
         result.version == entity.version
         result.dateCreated == entity.dateCreated
         result.lastUpdated == entity.lastUpdated
-    }
-
-    def "searchDois should use a simple query string for the search term"() {
-
-        setup:
-        def esQueryResult = null
-
-        when:
-        service.searchDois(10, 0, "test")
-
-        then:
-
-        1 * service.elasticSearchService.search([from:0, size:10], _) >> {params, it -> esQueryResult = new JsonSlurper().parseText(it.toString()); return null }
-        esQueryResult.bool != null
-        esQueryResult.bool.must != null
-        esQueryResult.bool.must.size() == 1
-        esQueryResult.bool.must[0].simple_query_string.query == 'test'
-    }
-
-    def "searchDois should use a match all query if no search term is supplied"() {
-
-        setup:
-        def esQueryResult = null
-
-        when:
-        service.searchDois(10, 0, "")
-
-        then:
-
-        1 * service.elasticSearchService.search([from:0, size:10], _) >> {params, it -> esQueryResult = new JsonSlurper().parseText(it.toString()); return null }
-        esQueryResult.bool != null
-        esQueryResult.bool.must != null
-        esQueryResult.bool.must.size() == 1
-        esQueryResult.bool.must[0].match_all != null
-    }
-
-    def "searchDois should use the non-analyzed keyword field to filter supplied filter terms"() {
-
-        setup:
-        def esQueryResult = null
-
-        when:
-        service.searchDois(10, 0, "test", [fieldName:"filterTerm"])
-
-        then:
-
-        1 * service.elasticSearchService.search([from:0, size:10], _) >> {params, it -> esQueryResult = new JsonSlurper().parseText(it.toString()); return null }
-        esQueryResult.bool.must[0].simple_query_string.query == 'test'
-        esQueryResult.bool.filter.term[0]['fieldName.keyword'].value == 'filterTerm'
     }
 
     private static Doi doi(String doi, Map nullables = [:]) {

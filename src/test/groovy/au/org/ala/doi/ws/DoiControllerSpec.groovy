@@ -1,6 +1,8 @@
 package au.org.ala.doi.ws
 
 import au.org.ala.doi.Doi
+import au.org.ala.doi.DoiSearchService
+import au.org.ala.doi.DoiSearchServiceSpec
 import au.org.ala.doi.DoiService
 import au.org.ala.doi.MintResponse
 import au.org.ala.doi.storage.Storage
@@ -19,6 +21,7 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
 
     Storage storage
     DoiService doiService
+    DoiSearchService doiSearchService
 
     def setupSpec() {
         mockDomain Doi
@@ -29,6 +32,8 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
         controller.storage = storage
         doiService = Mock(DoiService)
         controller.doiService = doiService
+        doiSearchService = Mock(DoiSearchService)
+        controller.doiSearchService = doiSearchService
     }
 
 //    def "getDoi should return a HTTP 400 (BAD_REQUEST) if no id is provided"() {
@@ -234,7 +239,7 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
         controller.search()
 
         then:
-        1 * controller.doiService.searchDois(10, 0, "", null, "dateMinted", "desc") >> result
+        1 * controller.doiSearchService.searchDois(10, 0, "", null, "dateMinted", "desc") >> result
         response.status == HttpStatus.SC_OK
     }
 
@@ -252,7 +257,7 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
         controller.search()
 
         then:
-        1 * controller.doiService.searchDois(20, 10, "query string", [field1:'value1', field2:'value2'], "title", "asc") >> result
+        1 * controller.doiSearchService.searchDois(20, 10, "query string", [field1:'value1', field2:'value2'], "title", "asc") >> result
         response.status == HttpStatus.SC_OK
     }
 

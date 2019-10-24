@@ -14,31 +14,20 @@ import grails.core.GrailsApplication
 import grails.gorm.PagedResultList
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
-import grails.plugins.elasticsearch.ElasticSearchResult
-import grails.plugins.elasticsearch.ElasticSearchService
-import org.elasticsearch.index.query.BoolQueryBuilder
-import org.elasticsearch.index.query.QueryBuilder
-import org.elasticsearch.index.query.QueryBuilders
 import org.springframework.validation.Errors
 import org.springframework.web.multipart.MultipartFile
 
-import static au.org.ala.doi.util.StateAssertions.*
+import static au.org.ala.doi.util.StateAssertions.checkArgument
 import static au.org.ala.doi.util.Utils.isUuid
-import static org.elasticsearch.index.query.QueryBuilders.*
 
 class DoiService extends BaseDataAccessService {
-
-    // The grails elasticSearch plugin indexes string properties twice by default:
-    // first as an analysed field matching the property name,
-    // and second as a non-analyzed field with the suffix 'keyword'
-    private static String FILTER_FIELD_SUFFIX = '.keyword'
 
     GrailsApplication grailsApplication
     AndsService andsService
     MockService mockService
     Storage storage
     EmailService emailService
-    ElasticSearchService elasticSearchService
+    DoiSearchService doiSearchService
 
 //    @Value('${doi.service.mock:false}')
     boolean isUseMockDoiService() {
@@ -207,23 +196,6 @@ class DoiService extends BaseDataAccessService {
             }
             order(sortBy, sortOrder)
         }
-    }
-
-
-    /**
-     * Builds an elasticsearch query to search DOIs.
-     */
-    @ReadOnly
-    ElasticSearchResult searchDois(int pageSize, int startFrom, String searchTerm = "", Map filterParams = null, String sortBy = "dateMinted", String sortOrder = "desc") {
-
-        QueryBuilder query = searchTerm ? simpleQueryStringQuery(searchTerm) : matchAllQuery()
-        BoolQueryBuilder builder = QueryBuilders.boolQuery().must(query)
-
-        filterParams.each { name, value ->
-            builder.filter(termQuery(name+FILTER_FIELD_SUFFIX, value))
-        }
-
-        elasticSearchService.search([from:startFrom, size:pageSize], builder)
     }
 
     // Replace this with a factory if/when other DOI providers are supported
