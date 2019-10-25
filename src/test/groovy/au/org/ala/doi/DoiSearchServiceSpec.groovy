@@ -32,7 +32,7 @@ class DoiSearchServiceSpec extends Specification implements ServiceUnitTest<DoiS
         query.bool != null
         query.bool.must != null
         query.bool.must.size() == 1
-        query.bool.must[0].simple_query_string.query == 'test'
+        query.bool.must[0].query_string.query == 'test'
     }
 
     def "searchDois should use a match all query if no search term is supplied"() {
@@ -63,7 +63,7 @@ class DoiSearchServiceSpec extends Specification implements ServiceUnitTest<DoiS
 
         then:
         def query = JSON.parse(searchParams.receivedSearchRequest.source().query().toString())
-        query.bool.must[0].simple_query_string.query == 'test'
+        query.bool.must[0].query_string.query == 'test'
         query.bool.filter.term[0]['fieldName.keyword'].value == 'filterTerm'
     }
 

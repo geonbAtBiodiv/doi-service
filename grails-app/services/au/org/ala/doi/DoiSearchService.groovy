@@ -7,10 +7,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder
 import org.elasticsearch.index.query.QueryBuilder
 import org.elasticsearch.index.query.QueryBuilders
 
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery
-import static org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
-import static org.elasticsearch.index.query.QueryBuilders.termQuery
-
+import static org.elasticsearch.index.query.QueryBuilders.*
 
 /**
  * Wraps the plugin ElasticSearchService to modify the data mapping behaviour.  The plugin maps data directly
@@ -40,7 +37,7 @@ class DoiSearchService {
     @ReadOnly
     ElasticSearchResult searchDois(int pageSize, int startFrom, String searchTerm = "", Map filterParams = null, String sortBy = null, String sortOrder = "dsc") {
 
-        QueryBuilder query = searchTerm ? simpleQueryStringQuery(searchTerm) : matchAllQuery()
+        QueryBuilder query = searchTerm ? queryStringQuery(searchTerm) : matchAllQuery()
         BoolQueryBuilder builder = QueryBuilders.boolQuery().must(query)
 
         filterParams.each { name, value ->
