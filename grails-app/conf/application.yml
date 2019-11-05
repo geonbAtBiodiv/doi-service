@@ -175,6 +175,8 @@ doi:
     displayTemplates:
       - "template"
       - "biocache"
+      - "phylolink"
+      - "csdm"
 file:
     store: /data/doi-service/files
 
