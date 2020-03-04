@@ -54,11 +54,11 @@ if(inplace) {
 
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.springframework.boot:spring-boot-starter-logging:2.2.5.RELEASE"
+    compile "org.springframework.boot:spring-boot-autoconfigure:2.2.5.RELEASE"
     compile "org.grails:grails-core"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    compile "org.springframework.boot:spring-boot-starter-actuator:2.2.5.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:2.2.5.RELEASE"
     compile "org.grails:grails-web-boot"
     compile "org.grails:grails-logging"
     compile "org.grails:grails-plugin-rest"
