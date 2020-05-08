@@ -35,7 +35,7 @@ abstract class DoiProviderService {
 
         def requestPayload
         try {
-            requestPayload = generateRequestPayload(metadata, landingPageUrl)
+            requestPayload = generateRequestPayload(uuid, metadata, landingPageUrl)
         } catch (Exception e) {
             log.error('Failed to construct the provider request payload', e)
             throw new DoiMintingException("Failed to construct the provider request payload", e)
@@ -73,7 +73,7 @@ abstract class DoiProviderService {
         def requestPayload
         if (metadata) {
             try {
-                requestPayload = generateRequestPayload(metadata, landingPageUrl, doi)
+                requestPayload = generateRequestPayload(uuid, metadata, landingPageUrl, doi)
             } catch (Exception e) {
                 log.error('Failed to construct the provider request payload', e)
                 throw new DoiMintingException("Failed to construct the provider request payload", e)
@@ -138,11 +138,12 @@ abstract class DoiProviderService {
     /**
      * Convert the provider metadata Map into whatever format is required for the web service (e.g. JSON, XML, etc)
      *
+     * @param uuid The local unique identifier for the DOI
      * @param metadata The provider metadata required by the DOI Provider
      * @param landingPageUrl The landing page that the DOI needs to resolve to
      * @return The payload for the DOI minting request to be sent to the provider
      */
-    abstract def generateRequestPayload(Map metadata, String landingPageUrl, String doi = null)
+    abstract def generateRequestPayload(String uuid, Map metadata, String landingPageUrl, String doi = null)
 
     /**
      * Invoke the DOI provider's minting service, passing it the payload constructed in {@link #generateRequestPayload(java.util.Map, java.lang.String)}
