@@ -150,7 +150,3 @@ assets {
     minifyJs = true
     minifyCss = true
 }
-
-war {
-    exclude "xerces/**/**"
-}
