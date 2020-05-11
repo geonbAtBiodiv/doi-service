@@ -186,8 +186,7 @@ class DataCiteService extends DoiProviderService {
         def doi = new DOI(doiS)
         try {
             restDataCiteService.register(doi, new URI(landingPageUrl), dcMetadata)
-
-            return response
+            return successResponse(doiS)
         } catch (Exception e) {
             return processErrorResponse(doi, e)
         }
@@ -229,7 +228,7 @@ class DataCiteService extends DoiProviderService {
                 processErrorResponse(doi, e)
             }
         }
-        return successResponse()
+        return successResponse(doiS)
     }
 
     @Override

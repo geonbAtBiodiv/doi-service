@@ -62,7 +62,7 @@ class Doi {
 
     static mapping = {
         doi type: CitextType
-        provider defaultValue: DoiProvider.forName(Holders.config.doi.service.provider)
+        provider defaultValue: DoiProvider.byName(Holders.config.doi.service.provider as String)
         providerMetadata type: JsonbMapType
         applicationMetadata type: JsonbMapType
         active defaultValue: true
