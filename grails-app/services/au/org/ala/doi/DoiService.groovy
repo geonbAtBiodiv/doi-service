@@ -42,7 +42,7 @@ class DoiService extends BaseDataAccessService {
                 Map applicationMetadata = [:], String customLandingPageUrl = null, String defaultDoi = null,
                 String userId = null, Boolean active = true, List<String> authorisedRoles=[], String displayTemplate = null) {
         checkArgument provider
-        log.info("Trying to mint with provider: $provider")
+        log.debug("Trying to mint with provider: $provider")
         if(!defaultDoi) {
             checkArgument providerMetadata, "No provider metadata has been sent"
         }
@@ -204,7 +204,6 @@ class DoiService extends BaseDataAccessService {
     // Replace this with a factory if/when other DOI providers are supported
     private DoiProviderService getProviderService(DoiProvider provider) {
         DoiProviderService service
-        log.info("Get provider for $provider")
         if (useMockDoiService) {
             log.info("Using mock provider service")
             return mockService
