@@ -10,7 +10,7 @@ class DoiProviderServiceSpec extends Specification {
     def "generateLandingPageUrl should return the customLandingPageUrl if provided"() {
         given:
         DoiProviderService service = [
-                generateRequestPayload: { metadata, landingPage -> "payload"},
+                generateRequestPayload: { uuid, metadata, landingPage -> "payload"},
                 invokeCreateService: {}
         ] as DoiProviderService
 
@@ -24,7 +24,7 @@ class DoiProviderServiceSpec extends Specification {
     def "generateLandingPageUrl should return a standard, constructed URL when there is no customLandingPageUrl"() {
         given:
         DoiProviderService service = [
-                generateRequestPayload: { metadata, landingPage -> "payload"},
+                generateRequestPayload: { uuid, metadata, landingPage -> "payload"},
                 invokeCreateService: {},
                 generateLandingPageUrl: {"serverUrl/doi/uuid1"}
         ] as DoiProviderService
@@ -69,7 +69,7 @@ class DoiProviderServiceSpec extends Specification {
     def "mintDoi should throw a DoiMintingException if generateRequestPayload results in an exception"() {
         given:
         DoiProviderService service = [
-                generateRequestPayload: { Map m, String s -> throw new Exception("test")},
+                generateRequestPayload: { uuid, Map m, String s -> throw new Exception("test")},
                 invokeCreateService: {},
                 generateLandingPageUrl: {uuid, custom -> "serverUrl/doi/uuid1"}
         ] as DoiProviderService
@@ -84,7 +84,7 @@ class DoiProviderServiceSpec extends Specification {
     def "mintDoi should throw a DoiMintingException if invokeService results in an exception"() {
         given:
         DoiProviderService service = [
-                generateRequestPayload: { Map metadata, String landingPage -> "payload"},
+                generateRequestPayload: { uuid, Map metadata, String landingPage -> "payload"},
                 invokeCreateService: { String s, String t ->  throw new Exception("test")},
                 generateLandingPageUrl: {uuid, custom -> "serverUrl/doi/uuid1"}
         ] as DoiProviderService
@@ -99,7 +99,7 @@ class DoiProviderServiceSpec extends Specification {
     def "mintDoi should throw a DoiMintingException if invokeService returns a ServiceResponse with a result code other than HTTP 200"() {
         given:
         DoiProviderService service = [
-                generateRequestPayload: { metadata, landingPage -> "payload"},
+                generateRequestPayload: { uuid, metadata, landingPage -> "payload"},
                 invokeCreateService: { payload, landingPage -> new ServiceResponse(HttpStatus.SC_BAD_REQUEST, "bad")},
                 generateLandingPageUrl: {uuid, custom -> "serverUrl/doi/uuid1"}
         ] as DoiProviderService
@@ -114,7 +114,7 @@ class DoiProviderServiceSpec extends Specification {
     def "mintDoi should throw a DoiMintingException if invokeService returns a ServiceResponse with a result code of HTTP 200 but not DOI"() {
         given:
         DoiProviderService service = [
-                generateRequestPayload: { metadata, landingPage -> "payload"},
+                generateRequestPayload: { uuid, metadata, landingPage -> "payload"},
                 invokeCreateService: { payload, landingPage -> new ServiceResponse(HttpStatus.SC_OK, "bad")},
                 generateLandingPageUrl: {uuid, custom -> "serverUrl/doi/uuid1"}
         ] as DoiProviderService
@@ -129,7 +129,7 @@ class DoiProviderServiceSpec extends Specification {
     def "mintDoi should return the new DOI on success"() {
         given:
         DoiProviderService service = [
-                generateRequestPayload: { metadata, landingPage -> "payload"},
+                generateRequestPayload: { uuid, metadata, landingPage -> "payload"},
                 invokeCreateService: { payload, landingPage -> new ServiceResponse("newDoi")},
                 generateLandingPageUrl: {uuid, custom -> "serverUrl/doi/uuid1"}
         ] as DoiProviderService
