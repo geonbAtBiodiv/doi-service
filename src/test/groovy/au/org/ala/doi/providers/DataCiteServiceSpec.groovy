@@ -1,16 +1,24 @@
 package au.org.ala.doi.providers
 
-import com.google.common.io.Resources
+import au.org.ala.doi.exceptions.DoiMintingException
+import au.org.ala.doi.util.ServiceResponse
 import grails.testing.services.ServiceUnitTest
 import grails.util.Holders
 import grails.web.mapping.LinkGenerator
+import org.apache.http.HttpStatus
+import org.gbif.api.model.common.DoiData
+import org.gbif.api.model.common.DoiStatus
+import org.gbif.datacite.rest.client.DataCiteClient
 import org.gbif.datacite.rest.client.configuration.ClientConfiguration
 import org.gbif.doi.metadata.datacite.DataCiteMetadata
 import org.gbif.doi.metadata.datacite.DateType
 import org.gbif.doi.metadata.datacite.TitleType
+import org.gbif.doi.service.DoiExistsException
+import org.gbif.doi.service.DoiHttpException
 import org.gbif.doi.service.datacite.DataCiteValidator
 import org.gbif.doi.service.datacite.RestJsonApiDataCiteService
 import org.grails.spring.beans.factory.InstanceFactoryBean
+import retrofit2.http.DELETE
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -22,12 +30,79 @@ class DataCiteServiceSpec extends Specification implements ServiceUnitTest<DataC
         defineBeans {
             grailsLinkGenerator(InstanceFactoryBean, Stub(LinkGenerator), LinkGenerator)
         }
+
+        service.dataCiteClient = Mock(DataCiteClient)
         service.restDataCiteService = Mock(RestJsonApiDataCiteService)
         service.clientConf = ClientConfiguration.builder()
                 .withBaseApiUrl("https://api.test.datacite.org/")
                 .withTimeOut(60)
                 .withFileCacheMaxSizeMb(64)
                 .withUser("bob").withPassword("12345").build()
+    }
+
+
+    def "serviceStatus should return the 'OK' status code if the call to the DataCite service run correctly"() {
+        setup:
+        def metadata = Mock(DataCiteMetadata)
+        metadata.getIdentifier() >> Mock(DataCiteMetadata.Identifier)
+        metadata.getIdentifier().getValue() >> "10.1000/example1"
+        service.restDataCiteService.register(_, _, _) >> {}
+
+        when:
+        ServiceResponse response = service.invokeCreateService(metadata, "bla")
+
+        then:
+        response.getHttpStatus() == HttpStatus.SC_OK
+    }
+
+    def "serviceStatus should return the 'BAD_REQUEST' status code if the call to the DataCite gives some exception"() {
+        setup:
+        def metadata = Mock(DataCiteMetadata)
+        metadata.getIdentifier() >> Mock(DataCiteMetadata.Identifier)
+        metadata.getIdentifier().getValue() >> "10.1000/example2"
+        service.restDataCiteService.register(_, _, _) >> { throw new DoiHttpException() }
+
+        when:
+        ServiceResponse response = service.invokeCreateService(metadata, "bla")
+
+        then:
+        response.getHttpStatus() == HttpStatus.SC_BAD_REQUEST
+    }
+
+    def "deactivate should not fail when the DOI status is already hidden" () {
+        setup:
+        service.restDataCiteService.resolve(_) >> new DoiData(status)
+
+        when:
+        service.deactivateDoi("10.1000/example3")
+
+        then:
+        noExceptionThrown()
+
+        where:
+        status << [DoiStatus.RESERVED, DoiStatus.DELETED]
+    }
+
+    def "activate should not fail when the DOI status is already public" () {
+        setup:
+        service.restDataCiteService.resolve(_) >> new DoiData(DoiStatus.REGISTERED)
+
+        when:
+        service.activateDoi("10.1000/example4")
+
+        then:
+        noExceptionThrown()
+    }
+
+    def "activate should fail when the DOI status is deleted" () {
+        setup:
+        service.restDataCiteService.resolve(_) >> new DoiData(DoiStatus.DELETED)
+
+        when:
+        service.activateDoi("10.1000/example5")
+
+        then:
+        thrown DoiMintingException
     }
 
     def "generateRequestPayload should map all metadata fields to the DataCite xml schema"() {

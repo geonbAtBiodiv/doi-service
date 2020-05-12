@@ -183,6 +183,7 @@ class DataCiteService extends DoiProviderService {
     ServiceResponse invokeCreateService(Object requestPayload, String landingPageUrl) {
         def dcMetadata = requestPayload as DataCiteMetadata
         def doiS = dcMetadata.getIdentifier().getValue()
+        log.debug "Creating doi $doiS"
         def doi = new DOI(doiS)
         try {
             restDataCiteService.register(doi, new URI(landingPageUrl), dcMetadata)
@@ -194,6 +195,7 @@ class DataCiteService extends DoiProviderService {
 
     @Override
     ServiceResponse invokeUpdateService(String doiS, Map requestPayload, String landingPageUrl) {
+        log.debug "Updating doi $doi"
         def dcMetadata = requestPayload as DataCiteMetadata
         def doi = new DOI(doiS)
         try {
@@ -207,12 +209,32 @@ class DataCiteService extends DoiProviderService {
 
     @Override
     ServiceResponse invokeDeactivateService(String doi) {
+        log.debug "Deactivating doi $doi"
         return updateStatus(doi, EventType.HIDE)
     }
 
+    // DOI (EZID) state : DataCite Equivalent
+    // --------------------------------------
+    // REGISTERED (public): Findable
+    // RESERVED (reserved): Draft
+    // DELETED (unavailable): Registered
+    // NEW (-) : ()
+    // FAILED (-): ()
     private ServiceResponse updateStatus(String doiS, EventType event) {
         def doi = new DOI(doiS)
         DoiData doiData = restDataCiteService.resolve(doi)
+        if (event == EventType.HIDE  && (doiData.getStatus() == DoiStatus.RESERVED ||
+                doiData.getStatus() == DoiStatus.DELETED)
+        ) {
+            // As with ANDS service, when already deactivated we return success
+            log.debug "Deactivated doi $doi"
+            return successResponse(doiS)
+        } else
+        if (event == EventType.PUBLISH  && doiData.getStatus() == DoiStatus.REGISTERED ) {
+            // Same here
+            log.debug "Activated doi $doi"
+            return successResponse(doiS)
+        } else
         if (doiData.getStatus() != DoiStatus.RESERVED && doiData.getStatus() != DoiStatus.REGISTERED) {
             return new ServiceResponse(HttpStatus.SC_BAD_REQUEST, "Only a reserved/registered doi can be updated. DOI "
                     + doi.getDoiName() + " status is " + doiData.getStatus(), null)
@@ -233,6 +255,7 @@ class DataCiteService extends DoiProviderService {
 
     @Override
     ServiceResponse invokeActivateService(String doi) {
+        log.debug "Activating doi $doi"
         return updateStatus(doi, EventType.PUBLISH)
     }
 
