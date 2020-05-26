@@ -109,6 +109,13 @@ environments:
         doi:
             service:
                 mock: true
+        datacite:
+            doi:
+                service:
+                    baseApiUrl: https://api.test.datacite.org/
+                    user: XXXXX
+                    password: XXXXX
+                    prefix: 10.XXXXX
     test:
         flyway:
             enabled: false # TODO is necessary?
@@ -159,6 +166,16 @@ ands:
         client:
             id: xx
 
+datacite:
+    doi:
+        service:
+            baseApiUrl: https://api.datacite.org/
+            user: XXXXX
+            password: XXXXX
+            fileCacheMaxSizeMb: 64
+            timeOut: 60
+            prefix: 10.XXXXX
+            shoulder: ala
 ala:
     base:
         url: https://ala.org.au
@@ -167,6 +184,8 @@ ala:
 doi:
     service:
         mock: false
+        # ANDS or DATACITE
+        provider: ANDS
     storage:
         provider: LOCAL
         cloud:
