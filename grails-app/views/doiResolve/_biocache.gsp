@@ -21,6 +21,27 @@
     <div class="col-md-12"><b>Record count:</b> <g:formatNumber number="${doi.applicationMetadata?.recordCount}" type="number" /></div>
     <div class="col-md-8 col-sm-12"><b>Search query:</b> <doi:formatSearchQuery searchUrl="${doi.applicationMetadata?.searchUrl}" /> </div>
     <div class="col-md-12"><b>Search URL:</b><a href="${doi.applicationMetadata?.searchUrl}"><doi:sanitiseRawContent content="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}" /></a></div>
+    <g:if test="${doi.applicationMetadata?.qualityFilters}">
+    <div class="col-md-12"><b>Data Quality Filters:</b>
+        <table class="table table-condensed table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Filter</th>
+            </tr>
+            </thead>
+            <tbody>
+            <g:each in="${doi.applicationMetadata?.qualityFilters}" var="qf">
+                <tr>
+                    <td>${qf.name}</td>
+                    <td>${qf.filter}</td>
+                </tr>
+            </g:each>
+            </tbody>
+        </table>
+    </div>
+    </g:if>
+    <div class="col-md-12"><b>Data Quality Filters applied:</b></div>
     <div class="col-md-12"><b>Licence:</b>
         <g:if test="${doi.licence}">
             <ul>
