@@ -41,7 +41,6 @@
         </table>
     </div>
     </g:if>
-    <div class="col-md-12"><b>Data Quality Filters applied:</b></div>
     <div class="col-md-12"><b>Licence:</b>
         <g:if test="${doi.licence}">
             <ul>
@@ -68,7 +67,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <g:each in="${doi.applicationMetadata?.datasets.sort{a,b -> b.count as Integer <=> a.count as Integer}}" var="dataset">
+                <g:each in="${doi.applicationMetadata?.datasets?.sort{a,b -> b.count as Integer <=> a.count as Integer}}" var="dataset">
                     <tr>
                         <td class="col-xs-4"><a href="${grailsApplication?.config.collections.baseUrl}/public/show/${dataset.uid}">${dataset.name}</a></td>
                         <td class="col-xs-3">${dataset.licence}</td>
