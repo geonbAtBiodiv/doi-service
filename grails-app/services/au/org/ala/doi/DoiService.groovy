@@ -5,6 +5,7 @@ import au.org.ala.doi.exceptions.DoiNotFoundException
 import au.org.ala.doi.exceptions.DoiUpdateException
 import au.org.ala.doi.exceptions.DoiValidationException
 import au.org.ala.doi.providers.AndsService
+import au.org.ala.doi.providers.DataCiteService
 import au.org.ala.doi.providers.DoiProviderService
 import au.org.ala.doi.providers.MockService
 import au.org.ala.doi.storage.Storage
@@ -24,6 +25,7 @@ class DoiService extends BaseDataAccessService {
 
     GrailsApplication grailsApplication
     AndsService andsService
+    DataCiteService dataCiteService
     MockService mockService
     Storage storage
     EmailService emailService
@@ -40,6 +42,7 @@ class DoiService extends BaseDataAccessService {
                 Map applicationMetadata = [:], String customLandingPageUrl = null, String defaultDoi = null,
                 String userId = null, Boolean active = true, List<String> authorisedRoles=[], String displayTemplate = null) {
         checkArgument provider
+        log.debug("Trying to mint with provider: $provider")
         if(!defaultDoi) {
             checkArgument providerMetadata, "No provider metadata has been sent"
         }
@@ -201,8 +204,8 @@ class DoiService extends BaseDataAccessService {
     // Replace this with a factory if/when other DOI providers are supported
     private DoiProviderService getProviderService(DoiProvider provider) {
         DoiProviderService service
-
         if (useMockDoiService) {
+            log.info("Using mock provider service")
             return mockService
         }
 
@@ -210,8 +213,10 @@ class DoiService extends BaseDataAccessService {
             case DoiProvider.ANDS:
                 service = andsService
                 break
+            case DoiProvider.DATACITE:
+                service = dataCiteService
+                break
         }
-
         service
     }
 }

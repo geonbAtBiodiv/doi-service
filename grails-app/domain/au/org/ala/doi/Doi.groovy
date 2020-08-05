@@ -2,6 +2,7 @@ package au.org.ala.doi
 
 import au.org.ala.doi.ArrayType
 import au.org.ala.doi.util.DoiProvider
+import grails.util.Holders
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import net.kaleidos.hibernate.usertype.JsonbMapType
@@ -64,7 +65,7 @@ class Doi {
 
     static mapping = {
         doi type: CitextType
-        provider defaultValue: DoiProvider.ANDS
+        provider defaultValue: DoiProvider.byName(Holders.config.doi.service.provider as String)
         providerMetadata type: JsonbMapType
         applicationMetadata type: JsonbMapType
         active defaultValue: true

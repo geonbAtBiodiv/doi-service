@@ -5,7 +5,7 @@ import au.org.ala.doi.util.ServiceResponse
 class MockService extends DoiProviderService {
 
     @Override
-    def generateRequestPayload(Map metadata, String landingPageUrl, String doi) {
+    def generateRequestPayload(String uuid, Map metadata, String landingPageUrl, String doi) {
         return [:]
     }
 
