@@ -29,7 +29,6 @@
 </head>
 
 <body>
-<ala:systemMessage/>
 <div>
 
     <g:render template="${displayTemplate}" />

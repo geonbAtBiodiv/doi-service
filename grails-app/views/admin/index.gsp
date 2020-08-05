@@ -16,7 +16,6 @@
     <asset:stylesheet src="doi.css"/>
 </head>
 <body>
-<ala:systemMessage/>
 <div class="col-sm-12">
     <h2 class="heading-medium">DOI Service Administration</h2>
 
