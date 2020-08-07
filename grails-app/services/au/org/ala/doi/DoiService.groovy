@@ -54,7 +54,6 @@ class DoiService extends BaseDataAccessService {
 
         UUID uuid = UUID.randomUUID()
 
-
 //        String contentType = file ? file.contentType : new URL(fileUrl).openConnection().contentType
         Doi entity = new Doi(uuid: uuid, customLandingPageUrl: customLandingPageUrl, dateMinted: new Date(),
                 title: title, authors: authors, description: description, licence: licence, provider: provider,
@@ -203,7 +202,7 @@ class DoiService extends BaseDataAccessService {
 
     // Replace this with a factory if/when other DOI providers are supported
     private DoiProviderService getProviderService(DoiProvider provider) {
-        DoiProviderService service
+
         if (useMockDoiService) {
             log.info("Using mock provider service")
             return mockService
@@ -211,12 +210,11 @@ class DoiService extends BaseDataAccessService {
 
         switch (provider) {
             case DoiProvider.ANDS:
-                service = andsService
-                break
+                return andsService
             case DoiProvider.DATACITE:
-                service = dataCiteService
-                break
+                return dataCiteService
         }
-        service
+
+        throw new MissingResourceException("unsupported DoiProvider ${provider}", DoiService as String, provider as String)
     }
 }

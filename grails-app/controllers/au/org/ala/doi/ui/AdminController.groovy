@@ -76,16 +76,15 @@ class AdminController {
             }
 
             def providerMetadata
-            def provider
             if (params?.newExistingDoiRadio == "existing") {
                 checkArgument params.existingDoi, "Existing DOI is required if registering an existing DOI"
-                provider = DoiProvider.byName(params.provider)
             } else {
                 checkArgument params.providerMetadata, "Provider metadata is required if minting a new DOI"
                 checkArgument params.provider, "Provider is required if minting a new DOI"
                 providerMetadata = JSON.parse(params.providerMetadata)
-                provider = DoiProvider.byName(params.provider)
             }
+
+            DoiProvider provider = DoiProvider.byName(params.provider)
 
             def userId = params.boolean('linkToUser', false) ? authService.userId : null
 

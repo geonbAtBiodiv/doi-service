@@ -184,8 +184,10 @@ ala:
 doi:
     service:
         mock: false
-        # ANDS or DATACITE
-        provider: ANDS
+        provider:
+#            # define mapping from provider name to a valid DoiProvider (ANDS or DATACITE)
+            mapping: { ALA: 'DATACITE' }
+
     storage:
         provider: LOCAL
         cloud:
