@@ -7,6 +7,7 @@ import au.org.ala.doi.DoiService
 import au.org.ala.doi.MintResponse
 import au.org.ala.doi.storage.Storage
 import au.org.ala.doi.util.DoiProvider
+import au.org.ala.doi.util.DoiProviderMapping
 import com.google.common.io.ByteSource
 import com.google.common.io.Files
 import grails.converters.JSON
@@ -228,6 +229,29 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
 
         then:
         1 * controller.doiService.mintDoi(DoiProvider.ANDS, [foo: "bar"], "title", "authors", "description", ["licence 1", "licence 2"], "http://example.org/applicationUrl", null, file, null, null, null, null, false, null, null) >> new MintResponse()
+    }
+
+    def "save should map provider if provided all metadata and the fileUrl for non-multipart requests"() {
+
+        setup:
+        DoiProviderMapping doiProviderMapping = new DoiProviderMapping()
+        doiProviderMapping.doiProviderMapping = [ ALA: 'DATACITE' ]
+        doiProviderMapping.init()
+
+        when:
+        request.JSON.provider = 'ALA'
+        request.JSON.applicationUrl = "http://example.org/applicationUrl"
+        request.JSON.providerMetadata = [foo: "bar"]
+        request.JSON.title = 'title'
+        request.JSON.authors = 'authors'
+        request.JSON.description = 'description'
+        request.JSON.fileUrl = "fileUrl"
+        request.JSON.userId = '1'
+        request.JSON.active = false
+        controller.save()
+
+        then:
+        1 * controller.doiService.mintDoi(DoiProvider.DATACITE, [foo: "bar"], "title", "authors", "description", null, "http://example.org/applicationUrl", "fileUrl", null, null, null, null, '1', false, null, null) >> new MintResponse()
     }
 
     def "search applies defaults to all parameters"() {
