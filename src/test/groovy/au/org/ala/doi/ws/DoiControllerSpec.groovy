@@ -15,6 +15,7 @@ import grails.plugins.elasticsearch.ElasticSearchResult
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
 import org.apache.http.HttpStatus
+import org.apache.lucene.search.TotalHits
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
@@ -257,7 +258,7 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
     def "search applies defaults to all parameters"() {
 
         setup:
-        ElasticSearchResult result = new ElasticSearchResult([total:20])
+        ElasticSearchResult result = new ElasticSearchResult([total: new TotalHits(20, TotalHits.Relation.EQUAL_TO)])
 
         when:
         controller.search()
@@ -269,7 +270,7 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
 
     def "search will pass user supplied parameters to the search service"() {
         setup:
-        ElasticSearchResult result = new ElasticSearchResult([total:20])
+        ElasticSearchResult result = new ElasticSearchResult([total: new TotalHits(20, TotalHits.Relation.EQUAL_TO)])
 
         when:
         params.max = 20

@@ -57,8 +57,7 @@ class DoiSearchService {
      * See: {@link grails.plugins.elasticsearch.ElasticSearchService#search(Map, QueryBuilder)}
      */
     private ElasticSearchResult search(Map params, QueryBuilder query) {
-
-        SearchRequest request = elasticSearchService.buildSearchRequest(query, null, params)
+        SearchRequest request = elasticSearchService.buildSearchRequest(query, null, null, params)
         // We are only retrieving the DOI ids from the search to avoid fetching and parsing the data as the
         // matching results will be retrieved from the database.
         request.source.fetchSource(['id'] as String[], new String[0])
