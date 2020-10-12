@@ -209,7 +209,7 @@ elasticSearch:
   client:
     mode: transport
     hosts:
-      - {host: localhost, port: 9300}
+      - {host: localhost, port: 9200}
   cluster.name: elasticsearch
   disableAutoIndex: false
   bulkIndexOnStartup: false
@@ -259,11 +259,6 @@ environments:
             username: "postgres"
             passowrd: "password"
             logSql: false
-
-        elasticSearch:
-            client:
-                mode: local
-            bulkIndexOnStartup: true
     test:
         dataSource:
             dbCreate: validate

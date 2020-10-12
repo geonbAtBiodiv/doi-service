@@ -434,12 +434,22 @@ class DoiController extends BasicWSController {
         }
         else {
             ElasticSearchResult result = doiSearchService.searchDois(command.max, command.offset, command.q, command.filters, command.sort, command.order)
-            def totalCount = result.total as int
+            def totalCount = result.total.value as int
 
             Map queryParams = [q:command.q, fq:command.fq]
             addPaginationHeaders(queryParams, totalCount, command.offset, command.max, command.sort, command.order)
 
-            respond result
+            // Use DoiElasticSearchResult to keep consistent response format
+            DoiElasticSearchResult doiResult = new DoiElasticSearchResult()
+            doiResult.total= result.total.value
+            doiResult.totalRel = result.total.relation
+            doiResult.searchResults = result.searchResults
+            doiResult.highlight = result.highlight
+            doiResult.scores = result.scores
+            doiResult.sort = result.sort
+            doiResult.aggregations = result.aggregations
+
+            respond doiResult
         }
     }
 

@@ -1,11 +1,9 @@
 package au.org.ala.doi
 
-import au.org.ala.doi.ArrayType
 import au.org.ala.doi.util.DoiProvider
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import net.kaleidos.hibernate.usertype.JsonbMapType
-import org.springframework.beans.propertyeditors.UUIDEditor
 
 import java.beans.PropertyEditorSupport
 
@@ -80,10 +78,9 @@ class Doi {
         fileSize excludeFromAll: true
         displayTemplate excludeFromAll: true
         active excludeFromAll: true
-        uuid converter: new UUIDEditor(), excludeFromAll: true
         licence converter: new PropertyEditorSupport()
 
-        except = ['authorisedRoles', 'fileHash', 'version', 'contentType', 'userId']
+        except = ['authorisedRoles', 'fileHash', 'version', 'contentType', 'userId', 'uuid']
     }
 
     def beforeValidate() {

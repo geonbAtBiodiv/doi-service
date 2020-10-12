@@ -7,6 +7,7 @@ branches:
     - develop
     - master
     - f/csdm
+    - feature/#63-upgrade-ES-5to7
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
