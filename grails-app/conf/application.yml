@@ -259,11 +259,6 @@ environments:
             username: "postgres"
             passowrd: "password"
             logSql: false
-
-#        elasticSearch:
-#            client:
-#                mode: local
-#            bulkIndexOnStartup: false
     test:
         dataSource:
             dbCreate: validate
