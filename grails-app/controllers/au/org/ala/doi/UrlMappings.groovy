@@ -10,6 +10,7 @@ class UrlMappings {
             head "/doi"(controller: "doi", action: "index", namespace: "v1")
             get "/doi"(controller: "doi", action: "index", namespace: "v1")
             post "/doi"(controller: "doi", action: "save", namespace: "v1")
+            get "/doi/search"(controller: "doi", action: "search", namespace: "v1")
             head "/doi/$id**/download"(controller: "doi", action: "download", namespace: "v1")
             head "/doi/$id**"(controller: "doi", action: "show", namespace: "v1")
             get "/doi/$id**/download"(controller: "doi", action: "download", namespace: "v1")
@@ -56,6 +57,7 @@ class UrlMappings {
         get "/admin"(controller:'admin', action:"index")
         get "/admin/mintDoi"(controller:'admin', action:"mintDoi")
         post "/admin/createDoi"(controller:'admin', action: "createDoi")
+        get "/admin/indexAll"(controller:'admin', action:"indexAll")
 
         "500" view: "/error"
         "400" view: "/error"

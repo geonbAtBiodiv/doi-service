@@ -1,16 +1,21 @@
 package au.org.ala.doi.ws
 
 import au.org.ala.doi.Doi
+import au.org.ala.doi.DoiSearchService
+import au.org.ala.doi.DoiSearchServiceSpec
 import au.org.ala.doi.DoiService
 import au.org.ala.doi.MintResponse
 import au.org.ala.doi.storage.Storage
 import au.org.ala.doi.util.DoiProvider
+import au.org.ala.doi.util.DoiProviderMapping
 import com.google.common.io.ByteSource
 import com.google.common.io.Files
 import grails.converters.JSON
+import grails.plugins.elasticsearch.ElasticSearchResult
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
 import org.apache.http.HttpStatus
+import org.apache.lucene.search.TotalHits
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
@@ -18,6 +23,7 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
 
     Storage storage
     DoiService doiService
+    DoiSearchService doiSearchService
 
     def setupSpec() {
         mockDomain Doi
@@ -28,6 +34,8 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
         controller.storage = storage
         doiService = Mock(DoiService)
         controller.doiService = doiService
+        doiSearchService = Mock(DoiSearchService)
+        controller.doiSearchService = doiSearchService
     }
 
 //    def "getDoi should return a HTTP 400 (BAD_REQUEST) if no id is provided"() {
@@ -224,5 +232,74 @@ class DoiControllerSpec extends Specification implements ControllerUnitTest<DoiC
         1 * controller.doiService.mintDoi(DoiProvider.ANDS, [foo: "bar"], "title", "authors", "description", ["licence 1", "licence 2"], "http://example.org/applicationUrl", null, file, null, null, null, null, false, null, null) >> new MintResponse()
     }
 
+    def "save should map provider if provided all metadata and the fileUrl for non-multipart requests"() {
+
+        setup:
+        DoiProviderMapping doiProviderMapping = new DoiProviderMapping()
+        doiProviderMapping.doiProviderMapping = [ ALA: 'DATACITE' ]
+        doiProviderMapping.init()
+
+        when:
+        request.JSON.provider = 'ALA'
+        request.JSON.applicationUrl = "http://example.org/applicationUrl"
+        request.JSON.providerMetadata = [foo: "bar"]
+        request.JSON.title = 'title'
+        request.JSON.authors = 'authors'
+        request.JSON.description = 'description'
+        request.JSON.fileUrl = "fileUrl"
+        request.JSON.userId = '1'
+        request.JSON.active = false
+        controller.save()
+
+        then:
+        1 * controller.doiService.mintDoi(DoiProvider.DATACITE, [foo: "bar"], "title", "authors", "description", null, "http://example.org/applicationUrl", "fileUrl", null, null, null, null, '1', false, null, null) >> new MintResponse()
+    }
+
+    def "search applies defaults to all parameters"() {
+
+        setup:
+        ElasticSearchResult result = new ElasticSearchResult([total: new TotalHits(20, TotalHits.Relation.EQUAL_TO)])
+
+        when:
+        controller.search()
+
+        then:
+        1 * controller.doiSearchService.searchDois(10, 0, "", null, "dateMinted", "desc") >> result
+        response.status == HttpStatus.SC_OK
+    }
+
+    def "search will pass user supplied parameters to the search service"() {
+        setup:
+        ElasticSearchResult result = new ElasticSearchResult([total: new TotalHits(20, TotalHits.Relation.EQUAL_TO)])
+
+        when:
+        params.max = 20
+        params.offset = 10
+        params.sort = "title"
+        params.order = "asc"
+        params.q = "query string"
+        params.fq = ["field1:value1", "field2:value2"]
+        controller.search()
+
+        then:
+        1 * controller.doiSearchService.searchDois(20, 10, "query string", [field1:'value1', field2:'value2'], "title", "asc") >> result
+        response.status == HttpStatus.SC_OK
+    }
+
+    def "search will return a 422 if invalid fq parameters are supplied"() {
+        when:
+        params.fq = ["field1:value1", "field1:value2"]
+        controller.search()
+
+        then:
+        response.status == HttpStatus.SC_UNPROCESSABLE_ENTITY
+
+        when:
+        params.fq = ["malformed filter"]
+        controller.search()
+
+        then:
+        response.status == HttpStatus.SC_UNPROCESSABLE_ENTITY
+    }
 
 }

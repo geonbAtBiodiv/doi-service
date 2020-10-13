@@ -229,7 +229,7 @@ class AndsService extends DoiProviderService {
     }
 
 
-    def generateRequestPayload(Map metadata, String landingPageUrl, String doi = null) {
+    def generateRequestPayload(String uuid, Map metadata, String landingPageUrl, String doi = null) {
         StringWriter writer = new StringWriter()
 
         def doiValue = doi ?: "10.5072/example" // doi is a mandatory element in the schema, in a mint request the value is ignored

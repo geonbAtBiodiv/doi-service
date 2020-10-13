@@ -182,7 +182,7 @@ class AndsServiceSpec extends Specification implements ServiceUnitTest<AndsServi
         String expectedXml = Resources.getResource('resources/ValidANDSRequest.xml').text
 
         when:
-        String xml = service.generateRequestPayload(andsMetadata, "landingPageUrl")
+        String xml = service.generateRequestPayload("uuid", andsMetadata, "landingPageUrl")
 
         then:
         standardizeSpaces(xml) == standardizeSpaces(expectedXml)

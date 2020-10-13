@@ -1,4 +1,4 @@
-<%@ page import="com.jakewharton.byteunits.BinaryByteUnit; com.google.common.io.BaseEncoding" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,47 +11,34 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    %{-- Google Analytics --}%
-    <script>
-        window.ga = window.ga || function () {
-                    (ga.q = ga.q || []).push(arguments)
-                };
-        ga.l = +new Date;
-        ga('create', '${grailsApplication.config.googleAnalyticsId}', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <script async src='//www.google-analytics.com/analytics.js'></script>
-    %{--End Google Analytics--}%
-
     <asset:stylesheet src="doi.css"/>
 </head>
 
 <body>
 
 <div class="col-sm-12 col-md-9 col-lg-9">
-    <h1 class="heading-medium ${doi.active? '': 'text-muted'}">${doi.title}
-        <g:if test="${!doi.active}">
-            <small class="badge badge-secondary"><g:message code="doi.inactive"/></small>
-        </g:if>
-    </h1>
-
+    <div class="col-md-12" id="doiTitle">
+        <h2><a href="https://doi.org/${doi.doi}" type="button" class="doi"><span>DOI</span><span>${doi.doi}</span></a></h2>
+		<h3 class="heading-medium ${doi.active? '': 'text-muted'}">${doi.title}
+			<g:if test="${!doi.active}">
+				<small class="badge badge-secondary"><g:message code="doi.inactive"/></small>
+			</g:if>
+		</h3>
+    </div>
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="word-limit break-word">
-                        <h2 class="heading-medium padding-bottom-10">${doi.authors}</h2>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="well">
-                                    <p>To access this resource, you can</p>
-                                    <p>
+                                    <p style="margin-top: 4px; margin-bottom: 4px;">To access this resource, you can 
                                         <a class="btn btn-default" href="${doi.applicationUrl}"
+										   style="margin-left: 4px; margin-top: -14px; margin-bottom: -12px;"
+
                                            title="Go to source">Go to the source</a>
-                                        <a class="btn btn-primary"
-                                           href="${request.contextPath}/doi/${doi.uuid}/download"
-                                           title="Download file">Download file</a>
                                     </p>
                                 </div>
                             </div>
@@ -59,16 +46,42 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                                <div class="padding-bottom-10">${doi.description}</div>
+                                <div class="row padding-bottom-10">
+                                    <div class="col-md-3">
+                                        <strong>Application URL:</strong>
 
-                                <div class="padding-bottom-10"><a href="https://doi.org/${doi.doi}" type="button" class="doi doi-sm"><span>DOI</span><span>${doi.doi}</a></div>
+                                    </div>
+
+                                    <div class="col-md-9">
+
+                                        <a href="${doi.applicationUrl}">${doi.applicationUrl}</a>                                        
+
+                                    </div>
+
+                                </div>
 
                                 <div class="row padding-bottom-10">
                                     <div class="col-md-3">
-                                        <strong>Created:</strong>
+                                        <strong>Date Created:</strong>
                                     </div>
                                     <div class="col-md-9">
                                         ${doi.dateMinted}
+                                    </div>
+                                </div>
+                                <div class="row padding-bottom-10">
+                                    <div class="col-md-3">
+                                        <strong>Authors:</strong>
+                                    </div>
+                                    <div class="col-md-9">
+                                        ${doi.authors}
+                                    </div>
+                                </div>
+                                <div class="row padding-bottom-10">
+                                    <div class="col-md-3">
+                                        <strong>Description:</strong>
+                                    </div>
+                                    <div class="col-md-9">
+                                        ${doi.description}
                                     </div>
                                 </div>
                                 <div class="row padding-bottom-10">
@@ -77,12 +90,62 @@
                                     </div>
                                     <div class="col-md-9">
                                         <g:if test="${doi.licence}">
-                                            <ul>
+                                            <ul style="margin-left: -22px;">
                                             <g:each in="${doi.licence}" var="licence" >
                                                 <li>${licence}</li>
                                             </g:each>
                                             </ul>
                                         </g:if>
+                                    </div>
+                                </div>
+                                <div class="row padding-bottom-10">
+                                    <div class="col-md-3">
+                                        <strong>Genus:</strong>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <g:if test="${doi.applicationMetadata.Genus}">
+                                            <ul style="margin-left: -22px;">
+                                            <g:each in="${doi.applicationMetadata.Genus}" var="v" >
+                                                <li>${v}</li>
+                                            </g:each>
+                                            </ul>
+                                        </g:if>
+                                    </div>
+                                </div>
+                                <div class="row padding-bottom-10">
+                                    <div class="col-md-3">
+                                        <strong>Species:</strong>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <g:if test="${doi.applicationMetadata.Species}">
+                                            <ol style="margin-left: -22px;">
+                                            <g:each in="${doi.applicationMetadata.Species}" var="v" >
+                                                <li>${v}</li>
+                                            </g:each>
+                                            </ol>
+                                        </g:if>
+                                    </div>
+                                </div>
+                                <div class="row padding-bottom-10">
+                                    <div class="col-md-3">
+                                        <strong>Creators:</strong>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <g:if test="${doi.applicationMetadata.Creators}">
+                                            <ul style="margin-left: -22px;">
+                                            <g:each in="${doi.applicationMetadata.Creators}" var="v" >
+                                                <li>${v.name}</li>
+                                            </g:each>
+                                            </ul>
+                                        </g:if>
+                                    </div>
+                                </div>
+                                <div class="row padding-bottom-10">
+                                    <div class="col-md-3">
+                                        <strong>Citation URL:</strong>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <a href="${grailsApplication.config.doi.resolverUrl}${doi.doi}">${grailsApplication.config.doi.resolverUrl}${doi.doi}</a>
                                     </div>
                                 </div>
                                 <g:if test="${doi.customLandingPageUrl}">
@@ -95,28 +158,6 @@
                                         </div>
                                     </div>
                                 </g:if>
-                                <g:if test="${doi.fileHash}">
-                                    <div class="row padding-bottom-10">
-                                        <div class="col-md-3">
-                                            <strong>File SHA-256:</strong>
-                                        </div>
-                                        <div class="col-md-9">
-                                            ${BaseEncoding.base16().encode(doi.fileHash)}
-                                        </div>
-                                    </div>
-                                </g:if>
-                                <g:if test="${doi.fileSize}">
-                                    <div class="row padding-bottom-10">
-                                        <div class="col-md-3">
-                                            <strong>File size:</strong>
-                                        </div>
-                                        <div class="col-md-9">
-                                            ${BinaryByteUnit.format(doi.fileSize)}
-                                        </div>
-                                    </div>
-                                </g:if>
-
-                                <g:render template="metadata" model="[metadata: doi.applicationMetadata]"/>
 
                                 <g:if test="${isAdmin}">
                                     <div class=" padding-top-10">
@@ -153,7 +194,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="alert alert-info alert-dismissible" role="alert">
+                                <div class="alert alert-info alert-dismissible" role="alert" style="margin-top: 10px; margin-bottom: 0px;">
                                     <button type="button" class="close" data-dismiss="alert"
                                             aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     If you are having trouble accessing this document, please <a

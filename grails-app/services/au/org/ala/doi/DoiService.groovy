@@ -5,6 +5,7 @@ import au.org.ala.doi.exceptions.DoiNotFoundException
 import au.org.ala.doi.exceptions.DoiUpdateException
 import au.org.ala.doi.exceptions.DoiValidationException
 import au.org.ala.doi.providers.AndsService
+import au.org.ala.doi.providers.DataCiteService
 import au.org.ala.doi.providers.DoiProviderService
 import au.org.ala.doi.providers.MockService
 import au.org.ala.doi.storage.Storage
@@ -14,20 +15,21 @@ import grails.core.GrailsApplication
 import grails.gorm.PagedResultList
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
-import org.hibernate.Transaction
 import org.springframework.validation.Errors
 import org.springframework.web.multipart.MultipartFile
 
-import static au.org.ala.doi.util.StateAssertions.*
+import static au.org.ala.doi.util.StateAssertions.checkArgument
 import static au.org.ala.doi.util.Utils.isUuid
 
 class DoiService extends BaseDataAccessService {
 
     GrailsApplication grailsApplication
     AndsService andsService
+    DataCiteService dataCiteService
     MockService mockService
     Storage storage
     EmailService emailService
+    DoiSearchService doiSearchService
 
 //    @Value('${doi.service.mock:false}')
     boolean isUseMockDoiService() {
@@ -40,6 +42,7 @@ class DoiService extends BaseDataAccessService {
                 Map applicationMetadata = [:], String customLandingPageUrl = null, String defaultDoi = null,
                 String userId = null, Boolean active = true, List<String> authorisedRoles=[], String displayTemplate = null) {
         checkArgument provider
+        log.debug("Trying to mint with provider: $provider")
         if(!defaultDoi) {
             checkArgument providerMetadata, "No provider metadata has been sent"
         }
@@ -50,7 +53,6 @@ class DoiService extends BaseDataAccessService {
         }
 
         UUID uuid = UUID.randomUUID()
-
 
 //        String contentType = file ? file.contentType : new URL(fileUrl).openConnection().contentType
         Doi entity = new Doi(uuid: uuid, customLandingPageUrl: customLandingPageUrl, dateMinted: new Date(),
@@ -200,18 +202,19 @@ class DoiService extends BaseDataAccessService {
 
     // Replace this with a factory if/when other DOI providers are supported
     private DoiProviderService getProviderService(DoiProvider provider) {
-        DoiProviderService service
 
         if (useMockDoiService) {
+            log.info("Using mock provider service")
             return mockService
         }
 
         switch (provider) {
             case DoiProvider.ANDS:
-                service = andsService
-                break
+                return andsService
+            case DoiProvider.DATACITE:
+                return dataCiteService
         }
 
-        service
+        throw new MissingResourceException("unsupported DoiProvider ${provider}", DoiService as String, provider as String)
     }
 }

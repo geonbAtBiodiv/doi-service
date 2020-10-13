@@ -1,5 +1,6 @@
 package au.org.ala.doi
 
+import au.org.ala.doi.providers.DataCiteService
 import au.org.ala.doi.providers.DoiAmazonS3Service
 import au.org.ala.doi.storage.DoiStorageProvider
 import au.org.ala.doi.storage.FileStorage
@@ -10,6 +11,9 @@ import com.amazonaws.services.s3.model.CannedAccessControlList
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
 import groovy.util.logging.Slf4j
+import org.gbif.datacite.rest.client.configuration.ClientConfiguration
+import org.gbif.datacite.rest.client.retrofit.DataCiteRetrofitSyncClient
+import org.gbif.doi.service.datacite.RestJsonApiDataCiteService
 import org.javaswift.joss.client.factory.AccountConfig
 import org.javaswift.joss.client.factory.AccountFactory
 import org.javaswift.joss.model.Account
@@ -65,6 +69,31 @@ class Application extends GrailsAutoConfiguration {
         }
 
         return new AccountFactory(config).createAccount()
+    }
+    
+    @Bean
+    @Lazy
+    ClientConfiguration dataCiteClientConf() {
+        ClientConfiguration clientConf = ClientConfiguration.builder().withBaseApiUrl(
+                grailsApplication.config.datacite.doi.service.baseApiUrl as String).withTimeOut(
+                grailsApplication.config.datacite.doi.service.timeOut as long).withFileCacheMaxSizeMb(
+                grailsApplication.config.datacite.doi.service.fileCacheMaxSizeMb as long).withUser(
+                grailsApplication.config.datacite.doi.service.user as String).withPassword(
+                grailsApplication.config.datacite.doi.service.password as String).build()
+        log.info "Using $grailsApplication.config.datacite.doi.service.baseApiUrl baseApiUrl"
+        return clientConf
+    }
+
+    @Bean
+    @Lazy
+    DataCiteRetrofitSyncClient dataCiteClient(ClientConfiguration dataCiteClientConf) {
+        return new DataCiteRetrofitSyncClient(dataCiteClientConf)
+    }
+
+    @Bean
+    @Lazy
+    RestJsonApiDataCiteService restDataCiteService(DataCiteRetrofitSyncClient dataCiteClient) {
+        return new RestJsonApiDataCiteService(dataCiteClient)
     }
 
 }
