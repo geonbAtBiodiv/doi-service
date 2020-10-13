@@ -19,28 +19,34 @@
     </div>
     <div class="col-md-12"><b>File:</b> <a href="${request.contextPath}/doi/${doi.uuid}/download"> ${doi.filename?:'download file not found'}</a></div><br>
     <div class="col-md-12"><b>Record count:</b> <g:formatNumber number="${doi.applicationMetadata?.recordCount}" type="number" /></div>
-    <div class="col-md-8 col-sm-12"><b>Search query:</b> <doi:formatSearchQuery searchUrl="${doi.applicationMetadata?.searchUrl}" /> </div>
-    <div class="col-md-12"><b>Search URL:</b><a href="${doi.applicationMetadata?.searchUrl}"><doi:sanitiseRawContent content="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}" /></a></div>
-    <g:if test="${doi.applicationMetadata?.qualityFilters}">
-    <div class="col-md-12"><b>Data Quality Filters:</b>
-        <table class="table table-condensed table-striped">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Filter</th>
-            </tr>
-            </thead>
-            <tbody>
-            <g:each in="${doi.applicationMetadata?.qualityFilters}" var="qf">
+    <div class="col-md-8 col-sm-12"><b>Parameters to re-run query with current data:</b> <doi:formatSearchQuery searchUrl="${doi.applicationMetadata?.searchUrl}" /> </div>
+    <div class="col-md-12"><b>Search URL to re-run query with current data:</b><a href="${doi.applicationMetadata?.searchUrl}"><doi:sanitiseRawContent content="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}" /></a></div>
+
+    <g:set var="enabled" value="${doi.applicationMetadata?.qualityFilters != null && doi.applicationMetadata?.qualityFilters.size() > 0}"/>
+    <div class="col-md-12">
+        <g:if test="${enabled}">
+            <b>Data profile:</b>&nbsp;${doi.applicationMetadata?.dataProfile}
+            <table class="table table-condensed table-striped">
+                <thead>
                 <tr>
-                    <td>${qf.name}</td>
-                    <td>${qf.filter}</td>
+                    <th>Name</th>
+                    <th>Filter</th>
                 </tr>
-            </g:each>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <g:each in="${doi.applicationMetadata?.qualityFilters}" var="qf">
+                    <tr>
+                        <td>${qf.name}</td>
+                        <td>${qf.filter}</td>
+                    </tr>
+                </g:each>
+                </tbody>
+            </table>
+        </g:if>
+        <g:else>
+            <b>Data profile disabled</b>
+        </g:else>
     </div>
-    </g:if>
     <div class="col-md-12"><b>Licence:</b>
         <g:if test="${doi.licence}">
             <ul>
