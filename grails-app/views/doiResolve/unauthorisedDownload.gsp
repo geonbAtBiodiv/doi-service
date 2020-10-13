@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="layout" content="main"/>
+	<meta name="layout" content="${grailsApplication.config.skin.layout}"/>
 	<title>ALA DOI Repository</title>
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -15,7 +15,6 @@
 </head>
 
 <body>
-<ala:systemMessage/>
 
 	<div class="col-sm-12 col-md-9 col-lg-9">
 

@@ -9,7 +9,7 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="layout" content="main"/>
+    <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <meta name="breadcrumbParent" content="${grailsApplication.config.grails.serverURL}/admin,${message(code:"doi.adminPage.title")}"/>
     <title>Mint/Register DOI</title>
     <asset:stylesheet src="doi.css" />
@@ -18,7 +18,6 @@
 </head>
 
 <body>
-<ala:systemMessage/>
 
 <div class="col-sm-12">
 

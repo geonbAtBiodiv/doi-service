@@ -5,6 +5,7 @@ import au.org.ala.doi.storage.Storage
 import au.org.ala.doi.util.DoiProvider
 import au.org.ala.web.AuthService
 import grails.converters.JSON
+import grails.plugins.elasticsearch.ElasticSearchService
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
 
@@ -15,6 +16,7 @@ class AdminController {
     DoiService doiService
     Storage storage
     AuthService authService
+    ElasticSearchService elasticSearchService
 
     def index() {
         // Only used to render admin main page
@@ -74,16 +76,15 @@ class AdminController {
             }
 
             def providerMetadata
-            def provider
             if (params?.newExistingDoiRadio == "existing") {
                 checkArgument params.existingDoi, "Existing DOI is required if registering an existing DOI"
-                provider = DoiProvider.ANDS
             } else {
                 checkArgument params.providerMetadata, "Provider metadata is required if minting a new DOI"
                 checkArgument params.provider, "Provider is required if minting a new DOI"
                 providerMetadata = JSON.parse(params.providerMetadata)
-                provider = DoiProvider.byName(params.provider)
             }
+
+            DoiProvider provider = DoiProvider.byName(params.provider)
 
             def userId = params.boolean('linkToUser', false) ? authService.userId : null
 
@@ -118,5 +119,13 @@ class AdminController {
             def errorMessage = e?.cause?.message ?: e.message
             render view: "mintDoi", model: [status: "error", errorMessage: errorMessage, mintParameters: params]
         }
+    }
+
+    /**
+     * Manual trigger to index all DOIs currently in the database.
+     */
+    def indexAll() {
+        elasticSearchService.index()
+        redirect action:'index'
     }
 }

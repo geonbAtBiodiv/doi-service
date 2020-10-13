@@ -3,8 +3,9 @@ package au.org.ala.doi
 import au.org.ala.doi.util.DoiProvider
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
-import au.org.ala.doi.ArrayType
 import net.kaleidos.hibernate.usertype.JsonbMapType
+
+import java.beans.PropertyEditorSupport
 
 @ToString
 @EqualsAndHashCode
@@ -61,12 +62,25 @@ class Doi {
 
     static mapping = {
         doi type: CitextType
-        provider defaultValue: DoiProvider.ANDS
         providerMetadata type: JsonbMapType
         applicationMetadata type: JsonbMapType
         active defaultValue: true
         licence type:ArrayType, params:[type: String]
         authorisedRoles type:ArrayType, params:[type: String]
+    }
+
+    static searchable = {
+        title boost: 2.0
+        authors boost: 2.0
+        description boost: 2.0
+        dateCreated excludeFromAll: true
+        lastUpdated excludeFromAll: true
+        fileSize excludeFromAll: true
+        displayTemplate excludeFromAll: true
+        active excludeFromAll: true
+        licence converter: new PropertyEditorSupport()
+
+        except = ['authorisedRoles', 'fileHash', 'version', 'contentType', 'userId', 'uuid']
     }
 
     def beforeValidate() {

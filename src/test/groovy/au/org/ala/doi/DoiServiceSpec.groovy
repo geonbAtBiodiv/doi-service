@@ -9,8 +9,12 @@ import au.org.ala.doi.util.DoiProvider
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import grails.converters.JSON
+import grails.plugins.elasticsearch.ElasticSearchService
 import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
+import groovy.json.JsonSlurper
+import org.elasticsearch.index.query.QueryBuilder
+import org.elasticsearch.index.query.QueryBuilders
 import org.grails.web.converters.configuration.ConvertersConfigurationInitializer
 import org.grails.web.json.JSONObject
 import org.springframework.web.multipart.MultipartFile

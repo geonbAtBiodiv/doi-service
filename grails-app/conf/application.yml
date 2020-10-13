@@ -109,6 +109,13 @@ environments:
         doi:
             service:
                 mock: true
+        datacite:
+            doi:
+                service:
+                    baseApiUrl: https://api.test.datacite.org/
+                    user: XXXXX
+                    password: XXXXX
+                    prefix: 10.XXXXX
     test:
         flyway:
             enabled: false # TODO is necessary?
@@ -126,7 +133,7 @@ server:
     remote-ip-header: 'X-Forwarded-For'
 
 skin:
-    layout: "main"
+    layout: "ala-main"
 
 app:
     http:
@@ -159,6 +166,16 @@ ands:
         client:
             id: xx
 
+datacite:
+    doi:
+        service:
+            baseApiUrl: https://api.datacite.org/
+            user: XXXXX
+            password: XXXXX
+            fileCacheMaxSizeMb: 64
+            timeOut: 60
+            prefix: 10.XXXXX
+            shoulder: ala
 ala:
     base:
         url: https://ala.org.au
@@ -167,6 +184,10 @@ ala:
 doi:
     service:
         mock: false
+        provider:
+#            # define mapping from provider name to a valid DoiProvider (ANDS or DATACITE)
+            mapping: { ALA: 'DATACITE' }
+
     storage:
         provider: LOCAL
         cloud:
@@ -175,10 +196,23 @@ doi:
     displayTemplates:
       - "template"
       - "biocache"
+      - "phylolink"
+      - "csdm"
+    publicationLang: "en"
 file:
     store: /data/doi-service/files
 
 googleAnalyticsId: UA-4355440-1
+
+elasticSearch:
+  datastoreImpl: hibernateDatastore
+  client:
+    mode: transport
+    hosts:
+      - {host: localhost, port: 9200}
+  cluster.name: elasticsearch
+  disableAutoIndex: false
+  bulkIndexOnStartup: false
 
 swagger:
     info:

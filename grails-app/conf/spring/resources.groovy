@@ -1,3 +1,4 @@
+import au.org.ala.doi.util.DoiProviderMapping
 import org.flywaydb.core.Flyway
 import org.springframework.beans.factory.config.BeanDefinition
 
@@ -28,6 +29,11 @@ beans = {
     }
     else {
         log.info "Grails Flyway plugin has been disabled"
+    }
+
+    // the configuration of the DOI mapping was not working Spring @Component injecting via @Value
+    doiProviderMapping(DoiProviderMapping) {
+        doiProviderMapping = application.config?.doi?.service?.provider?.mapping
     }
 }
 def addDependency(BeanDefinition beanDef, String dependencyName) {
