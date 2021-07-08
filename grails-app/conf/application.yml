@@ -199,6 +199,7 @@ doi:
       - "phylolink"
       - "csdm"
     publicationLang: "en"
+    supportContact: https://www.ala.org.au/about-the-atlas/communications-centre/
 file:
     store: /data/doi-service/files
 

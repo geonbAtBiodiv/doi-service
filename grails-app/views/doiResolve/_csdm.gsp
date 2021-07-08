@@ -11,22 +11,22 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12" id="doiTitle">
-            <h2><a href="https://doi.org/${doi.doi}" type="button" class="doi"><span>DOI</span><span>${doi.doi}</span></a></h2>
-            <h3>Occurrence records download on <g:formatDate date="${doi.dateCreated}" format="yyyy-MM-dd"/></h3>
+            <h2><a href="https://doi.org/${doi.doi}" type="button" class="doi"><span><g:message code="csdm.doi.title" /></span><span>${doi.doi}</span></a></h2>
+            <h3><g:message code="csdm.subtitle" args="[g.formatDate(date:doi.dateCreated, format:message(code:'doi.page.date.format'))]" /></h3>
         </div>
         <div class="col-md-12 text-right">
             <a href="${request.contextPath}/doi/${doi.uuid}/download" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt"></i>&nbsp; Download file</a>
         </div>
-        <div class="col-md-12"><b>Application:</b> ${doi.applicationMetadata.applicationName?:'Application not found'}</div>
-        <div class="col-md-12"><b>Modeller:</b> ${doi.applicationMetadata.modeller?:'Modeller not found'}</div>
-        <div class="col-md-12"><b>Organisation:</b> ${doi.applicationMetadata.organisation?:'Organisation not found'}</div>
-        <div class="col-md-12"><b>Dataset annotation:</b> ${doi.applicationMetadata.dataSetAnnotation?:'Dataset annotation not found'}</div>
-        <div class="col-md-12"><b>Workflow annotation:</b> ${doi.applicationMetadata.workflowAnnotation?:'Workflow annotation not found'}</div>
-        <div class="col-md-12"><b>File:</b> <a href="${request.contextPath}/doi/${doi.uuid}/download"> ${doi.filename?:'download file not found'}</a></div><br>
-        <div class="col-md-12"><b>Record count:</b> <g:formatNumber number="${doi.applicationMetadata?.recordCount}" type="number" /></div>
-        <div class="col-md-8 col-sm-12"><b>Search query:</b> <doi:formatSearchQuery searchUrl="${doi.applicationMetadata?.searchUrl}" /> </div>
-        <div class="col-md-12"><b>Search URL:</b><a href="${doi.applicationMetadata?.searchUrl}"><doi:sanitiseRawContent content="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}" /></a></div>
-        <div class="col-md-12"><b>Licence:</b>
+        <div class="col-md-12"><b><g:message code="csdm.application" /></b> ${doi.applicationMetadata.applicationName?:message(code:"csdm.application.not.found")}</div>
+        <div class="col-md-12"><b><g:message code="csdm.modeller" /></b> ${doi.applicationMetadata.modeller?:message(code:"csdm.modeller.not.found")}</div>
+        <div class="col-md-12"><b><g:message code="csdm.organisation" /></b> ${doi.applicationMetadata.organisation?:message(code:"csdm.organisation.not.found")}</div>
+        <div class="col-md-12"><b><g:message code="csdm.dataset.annotation" /></b> ${doi.applicationMetadata.dataSetAnnotation?:message(code:"csdm.dataset.annotation.not.found")}</div>
+        <div class="col-md-12"><b><g:message code="csdm.workflow.annotation" /></b> ${doi.applicationMetadata.workflowAnnotation?:message(code:"csdm.workflow.annotation.not.found")}</div>
+        <div class="col-md-12"><b><g:message code="csdm.file" /></b> <a href="${request.contextPath}/doi/${doi.uuid}/download"> ${doi.filename?:'download file not found'}</a></div><br>
+        <div class="col-md-12"><g:message code="csdm.record.count" args="[g.formatNumber(number:doi.applicationMetadata?.recordCount, type:'number')]" /></div>
+        <div class="col-md-8 col-sm-12"><b><g:message code="csdm.search.query" /></b> <doi:formatSearchQuery searchUrl="${doi.applicationMetadata?.searchUrl}" /> </div>
+        <div class="col-md-12"><b><g:message code="csdm.search.url" /></b><a href="${doi.applicationMetadata?.searchUrl}"><doi:sanitiseRawContent content="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}" /></a></div>
+        <div class="col-md-12"><b><g:message code="csdm.licence" /></b>
             <g:if test="${doi.licence}">
                 <ul>
                     <g:each in="${doi.licence}" var="licence" >
@@ -35,20 +35,20 @@
                 </ul>
             </g:if>
         </div>
-        <div class="col-md-12"><b>Authors:</b> ${doi.authors}</div>
-        <div class="col-md-12"><b>Date Created:</b> <g:formatDate date="${doi.dateCreated}" format="yyyy-MM-dd h:mm a"/></div>
-        <div class="col-md-12"><b>Citation URL:</b> <a href="${grailsApplication.config.doi.resolverUrl}${doi.doi}">${grailsApplication.config.doi.resolverUrl}${doi.doi}</a></div><br>
+        <div class="col-md-12"><b><g:message code="csdm.authors" /></b> ${doi.authors}</div>
+        <div class="col-md-12"><g:message code="csdm.date.created" args="[g.formatDate(date:doi.dateCreated, format:message(code:'csdm.date.format'))]" /></div>
+        <div class="col-md-12"><b><g:message code="csdm.citation.url" /></b> <a href="${grailsApplication.config.doi.resolverUrl}${doi.doi}">${grailsApplication.config.doi.resolverUrl}${doi.doi}</a></div><br>
 
     </div>
     <div class="row">
         <div class="fwtable table-responsive col-md-12">
-            <p><b>Datasets (<g:formatNumber number="${doi.applicationMetadata?.datasets?.size()}" type="number" />)</b></p>
+            <p><b><g:message code="doi.page.datasets" /> (<g:formatNumber number="${doi.applicationMetadata?.datasets?.size()}" type="number" />)</b></p>
             <table class="table table-bordered table-striped ">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Licence</th>
-                    <th style="text-align: center">Record count</th>
+                    <th><g:message code="doi.page.header.name" /></th>
+                    <th><g:message code="doi.page.header.licence" /></th>
+                    <th style="text-align: center"><g:message code="doi.page.header.record.count" /></th>
                 </tr>
                 </thead>
                 <tbody>

@@ -1,10 +1,12 @@
 <%@ page import="com.jakewharton.byteunits.BinaryByteUnit; com.google.common.io.BaseEncoding" %>
+<g:set var="orgNameShort" value="${grailsApplication.config.skin.orgNameShort}"/>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <meta name="breadcrumbParent" content="${grailsApplication.config.grails.serverURL},${message(code:"doi.homepage.title")}"/>
-    <title>DOI Details</title>
+    <meta name="breadcrumbParent" content="${grailsApplication.config.grails.serverURL},${message(code:"doi.homepage.title", args:[orgNameShort])}"/>
+    <title><g:message code="doi.page.title" args="[orgNameShort]" /></title>
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<g:set var="orgNameShort" value="${grailsApplication.config.skin.orgNameShort}"/>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
     <meta name="fluidLayout" content="false"/>
-    <title><g:message code="download.page.title"/></title>
+    <title><g:message code="download.page.title" args="[orgNameShort]"/></title>
+
     <asset:javascript src="downloads.js" />
     <asset:stylesheet src="downloads.css" />
 </head>
@@ -72,11 +74,11 @@
                     <table class="table table-bordered table-striped ">
                         <thead>
                             <tr>
-                                <th class="col-sm-2">Download</th>
-                                <th class="col-sm-2">Date</th>
-                                <th class="col-sm-1">Records</th>
-                                <th class="col-sm-1">Datasets</th>
-                                <th class="col-sm-6">Search Query</th>
+                                <th class="col-sm-2"><g:message code="myDownloads.header.download" /></th>
+                                <th class="col-sm-2"><g:message code="myDownloads.header.date" /></th>
+                                <th class="col-sm-1"><g:message code="myDownloads.header.records" /></th>
+                                <th class="col-sm-1"><g:message code="myDownloads.header.datasets" /></th>
+                                <th class="col-sm-6"><g:message code="myDownloads.header.search.query" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,14 +87,14 @@
                                    <td>
                                        <a href="${g.createLink(uri: '/doi')}/${doi.doi}" type="button" class="doi doi-sm"><span>DOI</span><span>${doi.doi}</span></a>
                                        <br>
-                                       Download file: <a href="${request.contextPath}/doi/${doi.uuid}/download"> ${doi.filename}</a>
+                                       <g:message code="myDownloads.field.file" /> <a href="${request.contextPath}/doi/${doi.uuid}/download"> ${doi.filename}</a>
                                    </td>
                                    <td><span class="no-wrap"><g:formatDate date="${doi.dateMinted}" format="yyyy-MM-dd"/></span>
                                        <span class="no-wrap"><g:formatDate date="${doi.dateMinted}" format="h:mm a"/></span></td>
                                    %{--<td>${doi.title}</td>--}%
                                    <td><g:formatNumber number="${doi.applicationMetadata?.recordCount}" type="number" /></td>
                                    <td><g:formatNumber number="${doi.applicationMetadata?.datasets?.size()}" type="number" /></td>
-                                   <td><a href="${doi?.applicationMetadata?.searchUrl}">Re-run search</a> <doi:formatSearchQuery searchUrl="${doi?.applicationMetadata?.searchUrl}" queryTitle="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}"/></td>
+                                   <td><a href="${doi?.applicationMetadata?.searchUrl}"><g:message code="myDownloads.re.run.search" /></a> <doi:formatSearchQuery searchUrl="${doi?.applicationMetadata?.searchUrl}" queryTitle="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}"/></td>
                                </tr>
                             </g:each>
                         </tbody>

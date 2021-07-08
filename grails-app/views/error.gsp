@@ -1,8 +1,9 @@
+<g:set var="orgNameShort" value="${grailsApplication.config.skin.orgNameShort}"/>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-	<title>ALA DOI Repository</title>
+	<title><g:message code="error.page.title" args="[orgNameShort]"/></title>
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

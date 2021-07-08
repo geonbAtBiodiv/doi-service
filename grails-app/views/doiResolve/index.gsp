@@ -1,8 +1,9 @@
+<g:set var="orgNameShort" value="${grailsApplication.config.skin.orgNameShort}"/>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <title>ALA DOI Repository</title>
+    <title><g:message code="doi.homepage.title" args="[orgNameShort]" /></title>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,10 +36,10 @@
                 <div class="panel-body">
 
                     <div class="word-limit">
-                        <h1 class="heading-xlarge">ALA DOI records</h1>
+                        <h1 class="heading-xlarge"><g:message code="index.doi.title" args="[orgNameShort]"/></h1>
 
                         <p class="lead">
-                            A digital object identifier (DOI) is a unique alphanumeric string assigned by a registration agency (the International DOI Foundation) to identify content and provide a persistent link to its location on the Internet.
+                            <g:message code="index.doi.description" />
                         </p>
                     </div>
                 </div>
@@ -63,18 +64,18 @@
                             <div class="well">
                                 <form class="form-horizontal">
                                     <div class="form-group">
-                                        <label for="filter" class="col-sm-2 control-label">Search filter</label>
+                                        <label for="filter" class="col-sm-2 control-label"><g:message code="index.search.filter" /></label>
 
                                         <div class="col-sm-10">
                                             <div class="input-group">
                                                 <input id="filter" type="text" class="form-control"
-                                                       placeholder="Refine your display results">
+                                                       placeholder="${message(code:"index.refine.placeholder")}">
                                                 <span class="input-group-btn">
-                                                    <a class="btn btn-default" type="button">Filter</a>
+                                                    <a class="btn btn-default" type="button"><g:message code="index.filter.btn" /></a>
                                                 </span>
                                             </div>
 
-                                            <p class="help-block">Use the search filter to refine the display results below</p>
+                                            <p class="help-block"><g:message code="index.filter.description" /></p>
                                         </div>
                                     </div>
                                 </form>
@@ -95,9 +96,9 @@
                                                     </g:if>
                                                 </h4>
 
-                                                <div class="padding-bottom-10"><a href="https://doi.org/${doi.doi}" type="button" class="doi doi-sm"><span>DOI</span><span>${doi.doi}</a></div>
-                                                <div class="padding-bottom-10"><strong>Created:</strong> ${doi.dateMinted}</div>
-                                                <div class="padding-bottom-10"><strong>Author(s):</strong> ${doi.authors}</div>
+                                                <div class="padding-bottom-10"><a href="https://doi.org/${doi.doi}" type="button" class="doi doi-sm"><span><g:message code="index.item.doi" /></span><span>${doi.doi}</span></a></div>
+                                                <div class="padding-bottom-10"><strong><g:message code="index.item.created" /></strong> ${doi.dateMinted}</div>
+                                                <div class="padding-bottom-10"><strong><g:message code="index.item.author" /></strong> ${doi.authors}</div>
                                                 <div class="padding-bottom-20">
                                                     ${doi.description}
                                                 </div>
@@ -111,8 +112,7 @@
             </div>
 
             <g:if test="${dois.totalCount > pageSize}">
-                <div class="small pull-right">Showing ${offset + 1} to ${Math.min(dois.totalCount, offset + pageSize)} of ${dois.totalCount}</div>
-
+                <div class="small pull-right"><g:message code="index.pagination.description" args="[offset + 1, Math.min(dois.totalCount, offset + pageSize), dois.totalCount]" /></div>
                 <div class="clear"></div>
 
                 <div class="row">
@@ -128,7 +128,7 @@
         </div>
         <div style="color:white;" class="pull-right">
             <g:if test="${isAdmin}">
-                <g:link controller="admin">Admin tools</g:link>
+                <g:link controller="admin"><g:message code="index.admin.tools.btn" /></g:link>
             </g:if>
         </div>
     </div>

@@ -45,10 +45,10 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="well">
-                                    <p>To access this resource, you can</p>
+                                    <p><g:message code="default.view.to.access.this.resource.you.can" /></p>
                                     <p>
                                         <a class="btn btn-default" href="${doi.applicationUrl}"
-                                           title="Go to source">Go to the source</a>
+                                           title="Go to source"><g:message code="default.view.go.to.the.source" /></a>
                                         <a class="btn btn-primary"
                                            href="${request.contextPath}/doi/${doi.uuid}/download"
                                            title="Download file">Download file</a>
@@ -65,7 +65,7 @@
 
                                 <div class="row padding-bottom-10">
                                     <div class="col-md-3">
-                                        <strong>Created:</strong>
+                                        <strong><g:message code="default.view.created" /></strong>
                                     </div>
                                     <div class="col-md-9">
                                         ${doi.dateMinted}
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="row padding-bottom-10">
                                     <div class="col-md-3">
-                                        <strong>Licence:</strong>
+                                        <strong><g:message code="default.view.licence" /></strong>
                                     </div>
                                     <div class="col-md-9">
                                         <g:if test="${doi.licence}">
@@ -88,17 +88,17 @@
                                 <g:if test="${doi.customLandingPageUrl}">
                                     <div class="row padding-bottom-10">
                                         <div class="col-md-3">
-                                            <strong>Landing page:</strong>
+                                            <strong><g:message code="default.view.landing.page" /></strong>
                                         </div>
                                         <div class="col-md-9">
-                                            This DOI was registered with an application-specific landing page. <a href="${doi.customLandingPageUrl}">View the application landing page.</a>
+                                            <g:message code="default.view.registered.with.application" /> <a href="${doi.customLandingPageUrl}"><g:message code="default.view.application.landing.page" /></a>
                                         </div>
                                     </div>
                                 </g:if>
                                 <g:if test="${doi.fileHash}">
                                     <div class="row padding-bottom-10">
                                         <div class="col-md-3">
-                                            <strong>File SHA-256:</strong>
+                                            <strong><g:message code="default.view.file.sha.256" /></strong>
                                         </div>
                                         <div class="col-md-9">
                                             ${BaseEncoding.base16().encode(doi.fileHash)}
@@ -108,7 +108,7 @@
                                 <g:if test="${doi.fileSize}">
                                     <div class="row padding-bottom-10">
                                         <div class="col-md-3">
-                                            <strong>File size:</strong>
+                                            <strong><g:message code="default.view.file.size" /></strong>
                                         </div>
                                         <div class="col-md-9">
                                             ${BinaryByteUnit.format(doi.fileSize)}
@@ -120,11 +120,11 @@
 
                                 <g:if test="${isAdmin}">
                                     <div class=" padding-top-10">
-                                        <h3>Admin only fields</h3>
+                                        <h3><g:message code="default.view.admin.only.fields" /></h3>
                                     </div>
                                     <div class="row padding-bottom-10">
                                         <div class="col-md-3">
-                                            <strong>User Id:</strong>
+                                            <strong><g:message code="default.view.user.id" /></strong>
                                         </div>
                                         <div class="col-md-9">
                                             ${doi.userId}
@@ -133,11 +133,11 @@
 
                                     <g:if test="${doi.authorisedRoles}">
                                         <div>
-                                            The DOI contains sensitive data. The file can only be accessed by users that has all of the roles below
+                                            <g:message code="default.view.roles" />
                                         </div>
                                         <div class="row padding-bottom-10">
                                             <div class="col-md-3">
-                                                <strong>Sensitive roles:</strong>
+                                                <strong><g:message code="default.view.sensitive.roles" /></strong>
                                             </div>
                                             <div class="col-md-9">
                                                 <ul>
@@ -156,8 +156,7 @@
                                 <div class="alert alert-info alert-dismissible" role="alert">
                                     <button type="button" class="close" data-dismiss="alert"
                                             aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    If you are having trouble accessing this document, please <a
-                                        href="https://www.ala.org.au/about-the-atlas/communications-centre/">contact the Atlas of Living Australia</a> to request a copy in a format that you can use.
+                                    <g:message code="default.view.support" args="[grailsApplication?.config.supportContact, message(code:'default.view.contact.title', args:[grailsApplication.config.skin.orgNameLong])]" />
                                 </div>
                             </div>
                         </div>

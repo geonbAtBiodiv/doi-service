@@ -7,8 +7,16 @@ import org.grails.web.converters.marshaller.ObjectMarshaller
 import org.grails.web.converters.marshaller.json.GenericJavaBeanMarshaller
 
 class BootStrap {
+    def messageSource
 
     def init = { servletContext ->
+
+        messageSource.setBasenames(
+                "file:///var/opt/atlas/i18n/doi/messages",
+                "file:///opt/atlas/i18n/doi/messages",
+                "WEB-INF/grails-app/i18n/messages",
+                "classpath:messages"
+        )
 
         JSON.registerObjectMarshaller(UUID) { uuid ->
             uuid.toString()

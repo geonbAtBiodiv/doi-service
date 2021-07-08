@@ -4,32 +4,32 @@
   Date: 13/04/2016
   Time: 6:04 PM
 --%>
-
+<g:set var="orgNameShort" value="${grailsApplication.config.skin.orgNameShort}"/>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <html>
 <head>
     <meta name="layout" content="${grailsApplication.config.skin.layout}"/>
-    <meta name="breadcrumbParent" content="${grailsApplication.config.grails.serverURL},${message(code:"doi.homepage.title")}"/>
+    <meta name="breadcrumbParent" content="${grailsApplication.config.grails.serverURL},${message(code:"doi.homepage.title", args:[orgNameShort])}"/>
     %{--<meta name="section" content="home"/>--}%
-    <title>DOI Service Administration</title>
+    <title><g:message code="doi.adminPage.title" /></title>
     <asset:stylesheet src="doi.css"/>
 </head>
 <body>
 <div class="col-sm-12">
-    <h2 class="heading-medium">DOI Service Administration</h2>
+    <h2 class="heading-medium"><g:message code="doi.adminPage.title" /></h2>
 
 
     <div class="panel panel-default well" id="page-body" role="main">
         <ul>
-            <li><g:link controller="admin" action="mintDoi">Mint/Register a DOI</g:link></li>
+            <li><g:link controller="admin" action="mintDoi"><g:message code="doi.adminPage.mint.register" /></g:link></li>
 %{--            The ALA admin plugin was commented out in the config so this doesn't work --}%
 %{--            <li><g:link controller="alaAdmin" action="index">ALA Admin</g:link></li>--}%
-            <li><g:link controller="admin" action="indexAll">Index all DOIs</g:link></li>
-            <li><g:link controller="apiDoc" action="getDocuments">API Documentation</g:link></li>
+            <li><g:link controller="admin" action="indexAll"><g:message code="doi.adminPage.index.all.dois" /></g:link></li>
+            <li><g:link controller="apiDoc" action="getDocuments"><g:message code="doi.adminPage.api.documentation" /></g:link></li>
         </ul>
         <p>
-            <span class="label label-default">Using ${storageType}</span>
+            <span class="label label-default"><g:message code="doi.adminPage.using" args="[storageType]" /></span>
         </p>
     </div>
     <div class="panel panel-default">
@@ -39,8 +39,8 @@
                 <tr>
                     <th>API (DOI) <small class="badge label-success">JSON</small> </th>
                     <th>API (UUID) <small class="badge label-success">JSON</small></th>
-                    <th>Resolve</th>
-                    <th>Download</th>
+                    <th><g:message code="doi.adminPage.resolve" /></th>
+                    <th><g:message code="doi.adminPage.download" /></th>
                 </tr>
             </thead>
             <tbody>

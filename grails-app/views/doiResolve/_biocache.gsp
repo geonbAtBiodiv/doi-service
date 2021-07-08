@@ -11,17 +11,16 @@
 <div class="container">
 <div class="row">
     <div class="col-md-12" id="doiTitle">
-        <h2><a href="https://doi.org/${doi.doi}" type="button" class="doi"><span>DOI</span><span>${doi.doi}</span></a></h2>
-        <h3>Occurrence records download on <g:formatDate date="${doi.dateCreated}" format="yyyy-MM-dd"/></h3>
+        <h2><a href="https://doi.org/${doi.doi}" type="button" class="doi"><span><g:message code="biocache.doi.title" /></span><span>${doi.doi}</span></a></h2>
+        <h3><g:message code="doi.page.download.subtitle" args="[g.formatDate(date:doi.dateCreated, format:message(code:'doi.page.date.format'))]"/></h3>
     </div>
     <div class="col-md-12 text-right">
-        <a href="${request.contextPath}/doi/${doi.uuid}/download" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt"></i>&nbsp; Download file</a>
+        <a href="${request.contextPath}/doi/${doi.uuid}/download" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt"></i>&nbsp; <g:message code="doi.page.download.link" /></a>
     </div>
-    <div class="col-md-12"><b>File:</b> <a href="${request.contextPath}/doi/${doi.uuid}/download"> ${doi.filename?:'download file not found'}</a></div><br>
-    <div class="col-md-12"><b>Record count:</b> <g:formatNumber number="${doi.applicationMetadata?.recordCount}" type="number" /></div>
-    <div class="col-md-8 col-sm-12"><b>Parameters to re-run query with current data:</b> <doi:formatSearchQuery searchUrl="${doi.applicationMetadata?.searchUrl}" /> </div>
-    <div class="col-md-12"><b>Search URL to re-run query with current data:</b><a href="${doi.applicationMetadata?.searchUrl}"><doi:sanitiseRawContent content="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}" /></a></div>
-
+    <div class="col-md-12"><b><g:message code="doi.page.file" /></b> <a href="${request.contextPath}/doi/${doi.uuid}/download"> ${doi.filename?:message(code:"doi.page.download.file.not.found")}</a></div><br>
+    <div class="col-md-12"><g:message code="doi.page.record.count" args="[g.formatNumber(number:doi.applicationMetadata?.recordCount, type:'number')]"/></div>
+    <div class="col-md-8 col-sm-12"><b><g:message code="doi.page.search.query" /></b> <doi:formatSearchQuery searchUrl="${doi.applicationMetadata?.searchUrl}" /> </div>
+    <div class="col-md-12"><b><g:message code="doi.page.search.url" /></b> <a href="${doi.applicationMetadata?.searchUrl}"><doi:sanitiseRawContent content="${doi.applicationMetadata?.queryTitle?.encodeAsRaw()}" /></a></div>
     <g:set var="enabled" value="${doi.applicationMetadata?.qualityFilters != null && doi.applicationMetadata?.qualityFilters.size() > 0}"/>
     <div class="col-md-12">
         <g:if test="${enabled}">
@@ -29,8 +28,8 @@
             <table class="table table-condensed table-striped">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Filter</th>
+                    <th><g:message code="doi.page.header.name" /></th>
+                    <th><g:message code="doi.page.header.filter" /></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,10 +43,10 @@
             </table>
         </g:if>
         <g:else>
-            <b>Data profile disabled</b>
+            <b><g:message code="doi.page.data.profile.disabled" /></b>
         </g:else>
     </div>
-    <div class="col-md-12"><b>Licence:</b>
+    <div class="col-md-12"><b><g:message code="doi.page.licence" /></b>
         <g:if test="${doi.licence}">
             <ul>
                 <g:each in="${doi.licence}" var="licence" >
@@ -56,20 +55,20 @@
             </ul>
         </g:if>
     </div>
-    <div class="col-md-12"><b>Authors:</b> ${doi.authors}</div>
-    <div class="col-md-12"><b>Date Created:</b> <g:formatDate date="${doi.dateCreated}" format="yyyy-MM-dd h:mm a"/></div>
-    <div class="col-md-12"><b>Citation URL:</b> <a href="${grailsApplication.config.doi.resolverUrl}${doi.doi}">${grailsApplication.config.doi.resolverUrl}${doi.doi}</a></div><br>
+    <div class="col-md-12"><b><g:message code="doi.page.authors" /></b> ${doi.authors}</div>
+    <div class="col-md-12"><b><g:message code="doi.page.date.created" /></b> <g:formatDate date="${doi.dateCreated}" format="yyyy-MM-dd h:mm a"/></div>
+    <div class="col-md-12"><b><g:message code="doi.page.citation.url" /></b> <a href="${grailsApplication.config.doi.resolverUrl}${doi.doi}">${grailsApplication.config.doi.resolverUrl}${doi.doi}</a></div><br>
 
 </div>
     <div class="row">
         <div class="fwtable table-responsive col-md-12">
-            <p><b>Datasets (<g:formatNumber number="${doi.applicationMetadata?.datasets?.size()}" type="number" />)</b></p>
+            <p><b><g:message code="doi.page.datasets" /> (<g:formatNumber number="${doi.applicationMetadata?.datasets?.size()}" type="number" />)</b></p>
             <table class="table table-bordered table-striped ">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Licence</th>
-                    <th style="text-align: center">Record count</th>
+                    <th><g:message code="doi.page.header.name" /></th>
+                    <th><g:message code="doi.page.header.licence" /></th>
+                    <th style="text-align: center"><g:message code="doi.page.header.record.count" /></th>
                 </tr>
                 </thead>
                 <tbody>
