@@ -18,7 +18,7 @@ plugins {
     id "com.gorylenko.gradle-git-properties" version "2.1.0"
 }
 
-version "1.1.3"
+version "1.1.4"
 group "au.org.ala"
 
 apply plugin:"eclipse"
@@ -114,6 +114,7 @@ dependencies {
     // override log4j in elasticsearch plugin
     // TODO remove this once no log4j vulnerable transitive deps are used.
     runtime 'org.apache.logging.log4j:log4j-core:2.15.0'
+    runtime 'org.apache.logging.log4j:log4j-api:2.15.0'
 
     // DB related
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.0'
