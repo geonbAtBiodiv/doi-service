@@ -111,6 +111,10 @@ dependencies {
     compile 'org.grails.plugins:grails-java8:1.2.1'
     compile 'org.grails.plugins:swagger:1.0.1'
 
+    // override log4j in elasticsearch plugin
+    // TODO remove this once no log4j vulnerable transitive deps are used.
+    runtime 'org.apache.logging.log4j:log4j-core:2.15.0'
+
     // DB related
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.0'
     compile 'org.grails.plugins:postgresql-extensions:5.2.0'
