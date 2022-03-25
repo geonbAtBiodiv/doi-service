@@ -134,6 +134,8 @@ server:
 
 skin:
     layout: "ala-main"
+headerAndFooter:
+    version: 2
 
 app:
     http:
@@ -141,6 +143,7 @@ app:
             userId: "X-ALA-userId"
 flyway:
     enabled: true
+    table: schema_version
 
 security:
     apikey:
@@ -148,10 +151,22 @@ security:
             serviceUrl: https://auth.ala.org.au/apikey/ws/check?apikey=
         ip:
             whitelist:
+    core:
+        uri-filter-pattern: ['/admin', '/admin/*', '/alaAdmin/*', '/doi/*/downloadAuth', '/myDownloads/*']
+        optional-filter-pattern: ['/*']
+        uriExclusionFilterPattern: ['/images.*','/css.*','/js.*','/less.*']
     cas:
-        uriExclusionFilterPattern: '/images.*,/css.*,/js.*,/less.*'
-        authenticateOnlyIfLoggedInFilterPattern: '/.*'
-        uriFilterPattern: '/admin, /admin/.*, /alaAdmin/?.*, /doi/.*/downloadAuth, /myDownloads.*'
+        enabled: false
+        uriExclusionFilterPattern: ['/images.*','/css.*','/js.*','/less.*']
+        authenticateOnlyIfLoggedInFilterPattern: ['/*']
+        uriFilterPattern: ['/admin', '/admin/*', '/alaAdmin/*', '/doi/*/downloadAuth', '/myDownloads/*']
+    oidc:
+        enabled: true
+        scope: openid profile email ala roles
+        allowUnsignedIdTokens: true # Disable once CAS no longer suggests the none algorithm
+    jwt:
+        enabled: true
+        fallbackToLegacyKeys: true # Reset to false once legacy api keys no longer supported
 
 support:
     email: support@ala.org.au
@@ -206,6 +221,9 @@ file:
 googleAnalyticsId: UA-4355440-1
 
 elasticSearch:
+  plugin:
+    mapperAttachment:
+      enabled: false
   datastoreImpl: hibernateDatastore
   client:
     mode: transport
@@ -215,32 +233,30 @@ elasticSearch:
   disableAutoIndex: false
   bulkIndexOnStartup: false
 
-swagger:
-    info:
-        description: "Generate DOIs for ALA applications"
-        version: "1.0"
-        title: "ALA DOI service"
-        termsOfServices: "http://www.ala.org.au/"
-        contact:
-            name: "ALA Support"
-            url: "http://www.ala.org.au/"
-            email: "support@ala.org.au"
-        license:
-            name: "ALA licence"
-            url: "http://www.ala.org.au/"
-    schemes:
-      - HTTP
-      - HTTPS
-    consumes:
-      - "application/json"
-      - "mutlipart/form-data"
+openapi:
+    title: ALA DOI service
+    description: Generate DOIs for ALA applications
+    terms: "https://www.ala.org.au/who-we-are/terms-of-use/"
+    contact:
+        name: ALA Support
+        url: "https://www.ala.org.au"
+        email: support@ala.org.au
+    license:
+        name: Mozilla Public License 1.1
+        url: https://www.mozilla.org/en-US/MPL/1.1/
+    version: '@info.app.version@'
+    cachetimeoutms: 0
 
 ---
 hibernate:
+    allow_update_outside_transaction: true # Hibernate 5 made transactions required to flush changes, set to true for backwards compat but should be set to false and bugs fixed in the future
+    show_sql: false
     cache:
         queries: false
         use_second_level_cache: false
         use_query_cache: false
+        region:
+            factory_class: org.hibernate.cache.jcache.internal.JCacheRegionFactory
     dialect: au.org.ala.doi.PostgresqlExtensionsDialect
 
 dataSource:
