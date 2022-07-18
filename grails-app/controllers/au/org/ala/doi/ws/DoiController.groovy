@@ -428,8 +428,8 @@ class DoiController extends BasicWSController {
                     @ApiResponse(
                             content = [
                                     @Content(
-                                            mediaType = 'application/json',
-                                            array = @ArraySchema(schema = @Schema(implementation = DoiElasticSearchResult))
+                                            mediaType = 'application/json'
+//                                            array = @ArraySchema(schema = @Schema(implementation = DoiElasticSearchResult))
                                     )
                             ],
                             headers = [
@@ -578,7 +578,7 @@ class DoiController extends BasicWSController {
                     description = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'",
                     required = true,
                     content = [
-                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
+//                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
                     ]
             ),
 
@@ -664,7 +664,7 @@ class DoiController extends BasicWSController {
                     description = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'",
                     required = true,
                     content = [
-                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
+//                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
                     ]
             ),
             responses = [
@@ -723,7 +723,7 @@ class DoiController extends BasicWSController {
                     description = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'",
                     required = true,
                     content = [
-                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest)),
+//                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest)),
                             @Content(mediaType = 'application/octet-stream', schema = @Schema(name='file', title='The file to upload', type='string', format='binary'))
                     ]
             ),
