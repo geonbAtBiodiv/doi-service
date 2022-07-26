@@ -12,6 +12,7 @@ import au.org.ala.doi.exceptions.DoiNotFoundException
 import au.org.ala.doi.exceptions.DoiUpdateException
 import au.org.ala.doi.exceptions.DoiValidationException
 import au.org.ala.doi.storage.Storage
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.google.common.io.ByteSource
 import grails.plugins.elasticsearch.ElasticSearchResult
 import grails.web.http.HttpHeaders
@@ -27,6 +28,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import org.elasticsearch.search.aggregations.Aggregation
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField
 
 //import io.swagger.annotations.Api
 //import io.swagger.annotations.ApiImplicitParam
@@ -428,8 +431,8 @@ class DoiController extends BasicWSController {
                     @ApiResponse(
                             content = [
                                     @Content(
-                                            mediaType = 'application/json'
-//                                            array = @ArraySchema(schema = @Schema(implementation = DoiElasticSearchResult))
+                                            mediaType = 'application/json',
+                                            array = @ArraySchema(schema = @Schema(implementation = DoiElasticSearchResult))
                                     )
                             ],
                             headers = [
@@ -578,7 +581,7 @@ class DoiController extends BasicWSController {
                     description = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'",
                     required = true,
                     content = [
-//                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
+                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
                     ]
             ),
 
@@ -664,7 +667,7 @@ class DoiController extends BasicWSController {
                     description = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'",
                     required = true,
                     content = [
-//                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
+                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest))
                     ]
             ),
             responses = [
@@ -723,7 +726,7 @@ class DoiController extends BasicWSController {
                     description = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'",
                     required = true,
                     content = [
-//                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest)),
+                            @Content(mediaType = 'application/json', schema = @Schema(implementation = UpdateRequest)),
                             @Content(mediaType = 'application/octet-stream', schema = @Schema(name='file', title='The file to upload', type='string', format='binary'))
                     ]
             ),
@@ -808,6 +811,30 @@ class DoiController extends BasicWSController {
     protected Doi queryForResource(Serializable id) {
         String idString = id instanceof String ? id : id.toString()
         isUuid(idString) ? doiService.findByUuid(idString) : doiService.findByDoi(idString)
+    }
+
+    // classes used for the OpenAPI definition generator
+    @JsonIgnoreProperties('metaClass')
+    static class UpdateRequest {
+        Map providerMetadata
+        String customLandingPageUrl
+        String title
+        String authors
+        String description
+        String applicationUrl
+        Map applicationMetadata
+        String fileUrl
+    }
+
+    @JsonIgnoreProperties('metaClass')
+    static class DoiElasticSearchResult {
+        Long total
+        String totalRel
+        List searchResults = []
+        List<Map<String, HighlightField>> highlight = []
+        Map<String, Float> scores = [:]
+        Map<String, Object[]> sort = [:]
+        Map<String, Aggregation> aggregations = [:]
     }
 
 }
