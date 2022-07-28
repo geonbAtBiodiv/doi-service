@@ -32,7 +32,7 @@ class UrlMappings {
             put "/doi/$id**"(version: "1.0", controller: "doi", action: "update", namespace: "v1")
             patch "/doi/$id**"(version: "1.0", controller: "doi", action: "patch", namespace: "v1")
 
-            "/"(controller: 'apiDoc', action: 'getDocuments', method: 'get')
+            "/"(controller: 'openApi', action: 'index', method: 'get')
 
             // legacy API mappings, DO NOT ADD V2 HERE!
             post "/v1/mintDoi"(controller: "doi", action: "save", namespace: "v1")
