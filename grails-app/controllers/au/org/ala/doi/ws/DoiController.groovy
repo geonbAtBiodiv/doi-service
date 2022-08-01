@@ -60,7 +60,7 @@ import static javax.servlet.http.HttpServletResponse.SC_CREATED
 import static javax.servlet.http.HttpServletResponse.SC_OK
 
 //@Api(value = "/api", tags = ["DOI"], description = "DOI API")
-@RequireApiKey(scopes=["doi:write"])
+@RequireApiKey(scopes=["doi/write"])
 class DoiController extends BasicWSController {
 
     static responseFormats = ['json']
@@ -108,6 +108,7 @@ class DoiController extends BasicWSController {
      */
     @Operation(
             summary = "Mint / Register / Reserve a DOI",
+            description = "Mint / Register / Reserve a DOI. Required scopes: 'doi/write'.",
             method = "POST",
             requestBody = @RequestBody(
                     description = "JSON request body.  The metadata for the mint request, may include a fileUrl that this service will fetch and use as the file for the DOI.  Provider metadata is provider specific",
@@ -132,7 +133,7 @@ class DoiController extends BasicWSController {
                     )
             ],
             security = [
-                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
             ],
             tags = ['DOI']
     )
@@ -207,6 +208,7 @@ class DoiController extends BasicWSController {
      */
     @Operation(
             summary = "Mint / Register / Reserve a DOI",
+            description = "Mint / Register / Reserve a DOI. Required scopes: 'doi/write'.",
             method = "POST",
 //            requestBody = @RequestBody(
 //                    required = false,
@@ -236,7 +238,7 @@ class DoiController extends BasicWSController {
                     )
             ],
             security = [
-                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
             ],
             tags = ['DOI']
     )
@@ -329,6 +331,7 @@ class DoiController extends BasicWSController {
 
     @Operation(
             summary = "List DOIs",
+            description = "List DOIs",
             method = "GET",
             parameters = [
                     @Parameter(name = "max", in = QUERY, description = 'max number of dois to return', schema = @Schema(implementation = Integer, defaultValue = '10')),
@@ -353,7 +356,7 @@ class DoiController extends BasicWSController {
                     )
             ],
 //            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
 //            ],
             tags = ['DOI']
     )
@@ -417,6 +420,7 @@ class DoiController extends BasicWSController {
 
     @Operation(
             summary = "Search DOIs",
+            description = "Search DOIs",
             method = "GET",
             parameters = [
                     @Parameter(name = "q", in = QUERY, description = 'An elasticsearch Simple Query String formatted string.', schema = @Schema(implementation = String)),
@@ -442,7 +446,7 @@ class DoiController extends BasicWSController {
                     )
             ],
 //            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
 //            ],
             tags = ['DOI']
     )
@@ -485,6 +489,7 @@ class DoiController extends BasicWSController {
     @Operation(
             summary = "Get a stored DOI and its metadata",
             method = "GET",
+            description = "Get a stored DOI and its metadata",
             parameters = [
                     @Parameter(name = "id", in = PATH, required = true, description = 'Either the DOI (encoded or unencoded) or the UUID', schema = @Schema(implementation = String)),
             ],
@@ -500,7 +505,7 @@ class DoiController extends BasicWSController {
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system')
             ],
 //            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
 //            ],
             tags = ['DOI']
     )
@@ -526,6 +531,7 @@ class DoiController extends BasicWSController {
     @Operation(
             summary = "Download the file associated with a DOI",
             method = "GET",
+            description = "Download the file associated with a DOI",
             parameters = [
                     @Parameter(name = "id", in = PATH, required = true, description = 'Either the DOI (encoded or unencoded) or the UUID', schema = @Schema(implementation = String)),
             ],
@@ -541,7 +547,7 @@ class DoiController extends BasicWSController {
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system')
             ],
 //            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
 //            ],
             tags = ['DOI']
     )
@@ -574,6 +580,7 @@ class DoiController extends BasicWSController {
     @Operation(
             summary = "Update the stored metadata or add a file to a DOI",
             method = "PATCH",
+            description = "Update the stored metadata or add a file to a DOI. Required scopes: 'doi/write'.",
             parameters = [
                     @Parameter(name = "id", in = PATH, required = true, description = 'Either the DOI (encoded or unencoded) or the UUID', schema = @Schema(implementation = String)),
             ],
@@ -595,7 +602,7 @@ class DoiController extends BasicWSController {
                     @ApiResponse(responseCode = '500', description = 'There is an error while storing the file or contacting the DOI service'),
             ],
             security = [
-                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
             ],
             tags = ['DOI']
     )
@@ -660,6 +667,7 @@ class DoiController extends BasicWSController {
     @Operation(
             summary = "Update the stored metadata or add a file to a DOI",
             method = "PUT",
+            description = "Update the stored metadata or add a file to a DOI. Required scopes: 'doi/write'.",
             parameters = [
                     @Parameter(name = "id", in = PATH, required = true, description = 'Either the DOI (encoded or unencoded) or the UUID', schema = @Schema(implementation = String)),
             ],
@@ -680,7 +688,7 @@ class DoiController extends BasicWSController {
                     @ApiResponse(responseCode = '500', description = 'There is an error while storing the file or contacting the DOI service'),
             ],
             security = [
-                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
             ],
             tags = ['DOI']
     )
@@ -719,6 +727,7 @@ class DoiController extends BasicWSController {
     @Operation(
             summary = "Update the stored metadata or add a file to a DOI",
             method = "POST",
+            description = "Update the stored metadata or add a file to a DOI. Required scopes: 'doi/write'.",
             parameters = [
                     @Parameter(name = "id", in = PATH, required = true, description = 'Either the DOI (encoded or unencoded) or the UUID', schema = @Schema(implementation = String)),
             ],
@@ -740,7 +749,7 @@ class DoiController extends BasicWSController {
                     @ApiResponse(responseCode = '500', description = 'There is an error while storing the file or contacting the DOI service'),
             ],
             security = [
-                    @SecurityRequirement(name = "openIdConnect", scopes = "doi:write")
+                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
             ],
             tags = ['DOI']
     )

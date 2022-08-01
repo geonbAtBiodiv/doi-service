@@ -142,7 +142,7 @@ dependencies {
     compile "org.grails.plugins:mail:3.0.0"
 //    compile 'org.grails.plugins:grails-java8:1.2.1'
 //    compile 'org.grails.plugins:swagger:1.0.1'
-    compile 'au.org.ala.plugins:openapi:1.0.0'
+    compile 'au.org.ala.plugins:openapi:1.1.0'
 
     compile "org.gbif:gbif-doi:2.17"
 
