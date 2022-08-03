@@ -246,6 +246,11 @@ openapi:
         url: https://www.mozilla.org/en-US/MPL/1.1/
     version: '@info.app.version@'
     cachetimeoutms: 0
+    components:
+      security:
+        oauth2:
+          scopes:
+            doi/write: Update a DOI record
 
 ---
 hibernate:

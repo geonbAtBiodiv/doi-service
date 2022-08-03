@@ -364,9 +364,9 @@ class DoiController extends BasicWSController {
     @Produces("application/json")
 //    @Consumes("application/json")
     @SkipApiKeyCheck
-    def index(Integer max) {
+    def index() {
 
-        max = Math.min(max ?: 10, 100)
+        Integer max = Math.min(params.max as Integer ?: 10, 100)
         int offset = params.int('offset', 0)
         String sort = params.get('sort', 'dateMinted')
         String order = params.get('order', 'desc')
@@ -512,7 +512,11 @@ class DoiController extends BasicWSController {
     @Path("/api/doi/{id}")
     @Produces("application/json")
     @SkipApiKeyCheck
-    def show(@NotNull String id) {
+    def show() {
+        if(params.id == null) {
+            badRequest "id is null"
+        }
+        String id = params.id
         Doi doi = queryForResource(id)
 
         if (!doi) {
@@ -554,7 +558,11 @@ class DoiController extends BasicWSController {
     @Path("/api/doi/{id}/download")
     @Produces("application/octet-stream")
     @SkipApiKeyCheck
-    def download(@NotNull String id) {
+    def download() {
+        if(params.id == null) {
+            badRequest "id is null"
+        }
+        String id = params.id
         Doi doi = queryForResource(id)
 
         if (!doi) {
