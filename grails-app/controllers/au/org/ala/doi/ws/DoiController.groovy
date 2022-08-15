@@ -54,6 +54,7 @@ import au.org.ala.doi.util.DoiProvider
 import au.org.ala.doi.DoiService
 import grails.converters.JSON
 
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY
 import static javax.servlet.http.HttpServletResponse.SC_CREATED
@@ -129,7 +130,12 @@ class DoiController extends BasicWSController {
                                     parameters = [
                                             @LinkParameter(name = 'uuid', expression = '$response.header.X-DOI-ID')
                                     ]
-                            )]
+                            )],
+                            headers = [
+                                @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
                     )
             ],
             security = [
@@ -234,7 +240,12 @@ class DoiController extends BasicWSController {
                                     parameters = [
                                             @LinkParameter(name = 'uuid', expression = '$response.header.X-DOI-ID')
                                     ]
-                            )]
+                            )],
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
                     )
             ],
             security = [
@@ -342,7 +353,7 @@ class DoiController extends BasicWSController {
                     @Parameter(name = "activeStatus", in = QUERY, description = 'Filters DOIs returned based on active flag. Valid values are \'all\', \'active\' or \'inactive\'. If omitted it defaults to \'active\'', schema = @Schema(implementation = String)),
             ],
             responses = [
-                    @ApiResponse(
+                    @ApiResponse( responseCode = "200",
                             content = [
                                     @Content(
                                             mediaType = 'application/json',
@@ -350,6 +361,9 @@ class DoiController extends BasicWSController {
                                     )
                             ],
                             headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String")),
                                     @Header(name = 'Link', description = 'Pagination links'),
                                     @Header(name = 'X-Total-Count', description = 'Total count of search results available')
                             ]
@@ -423,7 +437,7 @@ class DoiController extends BasicWSController {
             description = "Search DOIs",
             method = "GET",
             parameters = [
-                    @Parameter(name = "q", in = QUERY, description = 'An elasticsearch Simple Query String formatted string.', schema = @Schema(implementation = String)),
+                    @Parameter(name = "q", in = HEADER, description = 'An elasticsearch Simple Query String formatted string.', schema = @Schema(implementation = String), required = true),
                     @Parameter(name = "max", in = QUERY, description = 'max number of dois to return', schema = @Schema(implementation = Integer, defaultValue = '10')),
                     @Parameter(name = "offset", in = QUERY, description = 'index of the first record to return', schema = @Schema(implementation = Integer, defaultValue = '0')),
                     @Parameter(name = "sort", in = QUERY, description = 'the field to sort the results by', schema = @Schema(implementation = String, defaultValue = 'dateMinted', allowableValues = ['dateMinted','dateCreated','lastUpdated','title'])),
@@ -433,6 +447,7 @@ class DoiController extends BasicWSController {
             ],
             responses = [
                     @ApiResponse(
+                            responseCode = "200",
                             content = [
                                     @Content(
                                             mediaType = 'application/json',
@@ -440,6 +455,9 @@ class DoiController extends BasicWSController {
                                     )
                             ],
                             headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String")),
                                     @Header(name = 'Link', description = 'Pagination links'),
                                     @Header(name = 'X-Total-Count', description = 'Total count of search results available')
                             ]
@@ -494,12 +512,17 @@ class DoiController extends BasicWSController {
                     @Parameter(name = "id", in = PATH, required = true, description = 'Either the DOI (encoded or unencoded) or the UUID', schema = @Schema(implementation = String)),
             ],
             responses = [
-                    @ApiResponse(
+                    @ApiResponse( responseCode = "200",
                             content = [
                                     @Content(
                                             mediaType = 'application/json',
                                             schema = @Schema(implementation = Doi)
                                     )
+                            ],
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
                             ]
                     ),
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system')
@@ -540,12 +563,17 @@ class DoiController extends BasicWSController {
                     @Parameter(name = "id", in = PATH, required = true, description = 'Either the DOI (encoded or unencoded) or the UUID', schema = @Schema(implementation = String)),
             ],
             responses = [
-                    @ApiResponse(
+                    @ApiResponse(responseCode = "200",
                             content = [
                                     @Content(
                                             mediaType = 'application/octet-stream',
                                             schema = @Schema(type = 'string', format = 'binary')
                                     )
+                            ],
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
                             ]
                     ),
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system')
@@ -601,8 +629,13 @@ class DoiController extends BasicWSController {
             ),
 
             responses = [
-                    @ApiResponse(
-                            content = [@Content(mediaType = 'application/json', schema = @Schema(implementation = Doi))]
+                    @ApiResponse(responseCode = "200",
+                            content = [@Content(mediaType = 'application/json', schema = @Schema(implementation = Doi))],
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
                     ),
                     @ApiResponse(responseCode = '400', description = 'Attempting to update the file when there is already an existing file'),
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system'),
@@ -687,8 +720,13 @@ class DoiController extends BasicWSController {
                     ]
             ),
             responses = [
-                    @ApiResponse(
-                            content = [@Content(mediaType = 'application/json', schema = @Schema(implementation = Doi))]
+                    @ApiResponse(responseCode = "200",
+                            content = [@Content(mediaType = 'application/json', schema = @Schema(implementation = Doi))],
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
                     ),
                     @ApiResponse(responseCode = '400', description = 'Attempting to update the file when there is already an existing file'),
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system'),
@@ -748,8 +786,13 @@ class DoiController extends BasicWSController {
                     ]
             ),
             responses = [
-                    @ApiResponse(
-                            content = [@Content(mediaType = 'application/json', schema = @Schema(implementation = Doi))]
+                    @ApiResponse(responseCode = "200",
+                            content = [@Content(mediaType = 'application/json', schema = @Schema(implementation = Doi))],
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
                     ),
                     @ApiResponse(responseCode = '400', description = 'Attempting to update the file when there is already an existing file'),
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system'),
