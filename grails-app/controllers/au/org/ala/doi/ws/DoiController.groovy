@@ -195,9 +195,10 @@ class DoiController extends BasicWSController {
                 file = request.getFile(request.fileNames[0])
             }
 
-            MintResponse result = doiService.mintDoi(DoiProvider.byName(json.provider), json.providerMetadata, json.title,
-                    json.authors, json.description, json.licence, json.applicationUrl, json.fileUrl, file, json.applicationMetadata,
-                    json.customLandingPageUrl, null, json.userId, json.active, json.authorisedRoles, json.displayTemplate)
+            MintResponse result = doiService.mintDoi(DoiProvider.byName(json.provider as String), json.providerMetadata as Map, json.title as String,
+                    json.authors as String, json.description as String, json.licence as List<String>, json.applicationUrl as String, json.fileUrl as String, file, json.applicationMetadata as Map,
+                    json.customLandingPageUrl as String, null, json.userId as String, json.active as Boolean, json.authorisedRoles as List<String>, json.displayTemplate as String)
+
 
             if (result?.uuid) {
                 response.addHeader(HttpHeaders.LOCATION,
