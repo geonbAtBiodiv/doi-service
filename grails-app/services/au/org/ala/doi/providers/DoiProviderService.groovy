@@ -84,7 +84,7 @@ abstract class DoiProviderService {
 
         ServiceResponse response
         try {
-            response = invokeUpdateService(doi, requestPayload, landingPageUrl)
+            response = invokeUpdateService(doi, requestPayload as Map, landingPageUrl)
         } catch (Exception e) {
             log.error('Failed to invoke the provider update web service', e)
             throw new DoiMintingException("Failed to invoke the provider update web service", e)
