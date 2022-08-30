@@ -438,7 +438,7 @@ class DoiController extends BasicWSController {
             description = "Search DOIs",
             method = "GET",
             parameters = [
-                    @Parameter(name = "q", in = HEADER, description = 'An elasticsearch Simple Query String formatted string.', schema = @Schema(implementation = String), required = true),
+                    @Parameter(name = "q", in = QUERY, description = 'An elasticsearch Simple Query String formatted string.', schema = @Schema(implementation = String)),
                     @Parameter(name = "max", in = QUERY, description = 'max number of dois to return', schema = @Schema(implementation = Integer, defaultValue = '10')),
                     @Parameter(name = "offset", in = QUERY, description = 'index of the first record to return', schema = @Schema(implementation = Integer, defaultValue = '0')),
                     @Parameter(name = "sort", in = QUERY, description = 'the field to sort the results by', schema = @Schema(implementation = String, defaultValue = 'dateMinted', allowableValues = ['dateMinted','dateCreated','lastUpdated','title'])),
