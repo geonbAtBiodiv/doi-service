@@ -7,7 +7,6 @@ import au.org.ala.doi.DoiSearchService
 import au.org.ala.doi.MintRequest
 import au.org.ala.doi.MintResponse
 import au.org.ala.doi.SearchDoisCommand
-import au.org.ala.doi.UpdateRequest
 import au.org.ala.doi.exceptions.DoiNotFoundException
 import au.org.ala.doi.exceptions.DoiUpdateException
 import au.org.ala.doi.exceptions.DoiValidationException
@@ -31,13 +30,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.elasticsearch.search.aggregations.Aggregation
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField
 
-//import io.swagger.annotations.Api
-//import io.swagger.annotations.ApiImplicitParam
-//import io.swagger.annotations.ApiImplicitParams
-//import io.swagger.annotations.ApiOperation
-//import io.swagger.annotations.ApiResponse
-//import io.swagger.annotations.ApiResponses
-//import io.swagger.annotations.ResponseHeader
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
 
@@ -54,13 +46,11 @@ import au.org.ala.doi.util.DoiProvider
 import au.org.ala.doi.DoiService
 import grails.converters.JSON
 
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY
 import static javax.servlet.http.HttpServletResponse.SC_CREATED
 import static javax.servlet.http.HttpServletResponse.SC_OK
 
-//@Api(value = "/api", tags = ["DOI"], description = "DOI API")
 @RequireApiKey(scopes=["doi/write"])
 class DoiController extends BasicWSController {
 
@@ -146,46 +136,6 @@ class DoiController extends BasicWSController {
     @Path("/api/doi")
     @Produces("application/json")
     @Consumes("application/json")
-//    @ApiOperation(
-//            value = "Mint / Register / Reserve a DOI",
-//            nickname = "doi",
-//            produces = "application/json",
-//            consumes = "application/json",
-//            httpMethod = "POST",
-//            response = MintResponse,
-//            code = 201,
-//            responseHeaders = [
-//                    @ResponseHeader(
-//                            name = 'Location',
-//                            description = 'URL for minted / registered / reserved DOI',
-//                            response = String
-//                    )
-//            ]
-//    )
-//    @ApiResponses([
-//            @ApiResponse(code = 405,
-//                    message = "Method Not Allowed. Only POST is allowed"),
-//            @ApiResponse(code = 500,
-//                    message = "If the DOI already exists or there is an error while storing the file or contacting the DOI service")
-//    ])
-//    @ApiImplicitParams([
-//            @ApiImplicitParam(
-//                    paramType = "body",
-//                    value = "JSON request body.  The metadata for the mint request, may include a fileUrl that this service will fetch and use as the file for the DOI.  Provider metadata is provider specific",
-//                    dataType = 'au.org.ala.doi.MintRequest'),
-//            @ApiImplicitParam(name = "Accept-Version",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    defaultValue = "1.0",
-//                    allowableValues = "1.0",
-//                    value = "The API version"),
-//            @ApiImplicitParam(name = "apiKey",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    value = "An valid API Key from the apikey service")
-//    ])
     def save() {
         Map json = getJson(request)
 
@@ -257,50 +207,6 @@ class DoiController extends BasicWSController {
     @Path("/api/doi")
     @Produces("application/json")
     @Consumes("application/json")
-//    @ApiOperation(
-//            value = "Mint / Register / Reserve a DOI",
-//            nickname = "doi",
-//            produces = "application/json",
-//            consumes = "multipart/form-data",
-//            httpMethod = "PUT",
-//            response = MintResponse,
-//            code = 201,
-//            responseHeaders = [
-//                    @ResponseHeader(
-//                            name = 'Location',
-//                            description = 'URL for minted / registered / reserved DOI',
-//                            response = String
-//                    )
-//            ]
-//    )
-//    @ApiResponses([
-//            @ApiResponse(code = 405,
-//                    message = "Method Not Allowed. Only POST is allowed"),
-//            @ApiResponse(code = 500,
-//                    message = "If the DOI already exists or there is an error while storing the file or contacting the DOI service")
-//    ])
-//    @ApiImplicitParams([
-//            @ApiImplicitParam(name="file",
-//                    paramType = "formData",
-//                    value = "The file to upload",
-//                    dataType = 'file'),
-//            @ApiImplicitParam(name="json",
-//                    paramType = "formData",
-//                    value = "JSON request body.  The metadata for the mint request.  Provider metadata is provider specific.",
-//                    dataType = 'au.org.ala.doi.MintRequest'),
-//            @ApiImplicitParam(name = "Accept-Version",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    defaultValue = "1.0",
-//                    allowableValues = "1.0",
-//                    value = "The API version"),
-//            @ApiImplicitParam(name = "apiKey",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    value = "An valid API Key from the apikey service")
-//    ])
     def upload() {
     }
 
@@ -370,14 +276,10 @@ class DoiController extends BasicWSController {
                             ]
                     )
             ],
-//            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
-//            ],
             tags = ['DOI']
     )
     @Path("/api/doi")
     @Produces("application/json")
-//    @Consumes("application/json")
     @SkipApiKeyCheck
     def index() {
 
@@ -464,9 +366,6 @@ class DoiController extends BasicWSController {
                             ]
                     )
             ],
-//            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
-//            ],
             tags = ['DOI']
     )
     @Path("/api/doi/search")
@@ -528,9 +427,6 @@ class DoiController extends BasicWSController {
                     ),
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system')
             ],
-//            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
-//            ],
             tags = ['DOI']
     )
     @Path("/api/doi/{id}")
@@ -579,9 +475,6 @@ class DoiController extends BasicWSController {
                     ),
                     @ApiResponse(responseCode = '404', description = 'DOI or UUID not found in this system')
             ],
-//            security = [
-//                    @SecurityRequirement(name = "openIdConnect", scopes = "doi/write")
-//            ],
             tags = ['DOI']
     )
     @Path("/api/doi/{id}/download")
@@ -651,57 +544,6 @@ class DoiController extends BasicWSController {
     @Path("/api/doi/{id}")
     @Produces("application/json")
     @Consumes("application/json")
-//    @ApiOperation(
-//            value = "Update the stored metadata or add a file to a DOI",
-//            nickname = "doi/{id}",
-//            produces = "application/json",
-//            consumes = "application/json",
-//            httpMethod = "PATCH",
-//            response = Doi,
-//            responseHeaders = [
-//                    @ResponseHeader(
-//                            name = 'Location',
-//                            description = 'URL for minted / registered / reserved DOI',
-//                            response = String
-//                    )
-//            ]
-//    )
-//    @ApiResponses([
-//            @ApiResponse(code = 405,
-//                    message = "Method Not Allowed. Only GET, PUT, POST, PATCH is supported"),
-//            @ApiResponse(code = 400,
-//                    message = "Attempting to update the file when there is already an existing file"),
-//            @ApiResponse(code = 404,
-//                    message = "DOI or UUID not found in this system"),
-//            @ApiResponse(code = 422,
-//                    message = "If the request body creates an invalid DOI entry"),
-//            @ApiResponse(code = 500,
-//                    message = "There is an error while storing the file or contacting the DOI service")
-//    ])
-//    @ApiImplicitParams([
-//            @ApiImplicitParam(name = "id",
-//                    paramType = "path",
-//                    required = true,
-//                    dataType = "string",
-//                    value = "Either the DOI (encoded or unencoded) or the UUID"),
-//            @ApiImplicitParam(
-//                    paramType = "body",
-//                    required = true,
-//                    dataType = 'au.org.ala.doi.UpdateRequest',
-//                    value = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'"),
-//            @ApiImplicitParam(name = "Accept-Version",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    defaultValue = "1.0",
-//                    allowableValues = "1.0",
-//                    value = "The API version"),
-//            @ApiImplicitParam(name = "apiKey",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    value = "An valid API Key from the apikey service")
-//    ])
     def patch(@NotNull String id) {
         update(id)
     }
@@ -808,63 +650,6 @@ class DoiController extends BasicWSController {
     @Path("/api/doi/{id}")
     @Produces("application/json")
     @Consumes("multipart/form-data")
-//    @ApiOperation(
-//            value = "Update the stored metadata or add a file to a DOI",
-//            nickname = "doi/{id}",
-//            produces = "application/json",
-//            consumes = "multipart/form-data",
-//            httpMethod = "POST",
-//            response = Doi,
-//            responseHeaders = [
-//                    @ResponseHeader(
-//                            name = 'Location',
-//                            description = 'URL for minted / registered / reserved DOI',
-//                            response = String
-//                    )
-//            ]
-//    )
-//    @ApiResponses([
-//            @ApiResponse(code = 405,
-//                    message = "Method Not Allowed. Only GET, PUT, POST, PATCH is supported"),
-//            @ApiResponse(code = 400,
-//                    message = "Attempting to update the file when there is already an existing file"),
-//            @ApiResponse(code = 404,
-//                    message = "DOI or UUID not found in this system"),
-//            @ApiResponse(code = 422,
-//                    message = "If the request body creates an invalid DOI entry"),
-//            @ApiResponse(code = 500,
-//                    message = "There is an error while storing the file or contacting the DOI service")
-//    ])
-//    @ApiImplicitParams([
-//            @ApiImplicitParam(name = "id",
-//                    paramType = "path",
-//                    dataType = "string",
-//                    required = true,
-//                    value = "Either the DOI (encoded or unencoded) or the UUID"),
-//            @ApiImplicitParam(name="json",
-//                    paramType = "formData",
-//                    required = false,
-//                    dataType = 'au.org.ala.doi.UpdateRequest',
-//                    value = "The values to update the DOI with.  This will patch the existing DOI object with the provided values.  Only the following values are accepted: 'providerMetadata', 'customLandingPageUrl', 'title', 'authors', 'description', 'licence', 'applicationUrl','applicationMetadata'"),
-//            @ApiImplicitParam(name="file",
-//                    paramType = "formData",
-//                    required = false,
-//                    dataType = 'file',
-//                    value = "The file to upload"
-//            ),
-//            @ApiImplicitParam(name = "Accept-Version",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    defaultValue = "1.0",
-//                    allowableValues = "1.0",
-//                    value = "The API version"),
-//            @ApiImplicitParam(name = "apiKey",
-//                    paramType = "header",
-//                    required = true,
-//                    dataType = "string",
-//                    value = "An valid API Key from the apikey service")
-//    ])
     def updateUpload() {
 
     }
