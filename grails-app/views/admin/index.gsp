@@ -26,7 +26,7 @@
 %{--            The ALA admin plugin was commented out in the config so this doesn't work --}%
 %{--            <li><g:link controller="alaAdmin" action="index">ALA Admin</g:link></li>--}%
             <li><g:link controller="admin" action="indexAll"><g:message code="doi.adminPage.index.all.dois" /></g:link></li>
-            <li><g:link controller="apiDoc" action="getDocuments"><g:message code="doi.adminPage.api.documentation" /></g:link></li>
+            <li><g:link controller="openApi" action="index"><g:message code="doi.adminPage.api.documentation" /></g:link></li>
         </ul>
         <p>
             <span class="label label-default"><g:message code="doi.adminPage.using" args="[storageType]" /></span>

@@ -2,7 +2,8 @@ package au.org.ala.doi
 
 import org.apache.commons.lang.ObjectUtils
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SessionImplementor
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType
 import org.postgresql.util.PGobject
 
@@ -41,13 +42,13 @@ class CitextType implements UserType {
     }
 
     @Override
-    Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
         PGobject o = rs.getObject(names[0]) as PGobject
         return o?.value
     }
 
     @Override
-    void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.OTHER)
         } else {

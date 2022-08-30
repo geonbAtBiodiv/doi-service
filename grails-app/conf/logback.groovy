@@ -79,11 +79,11 @@ root(WARN, [TOMCAT_LOG])
                 "au.org.ala",
         ],
         (DEBUG): [
-                "grails.app",
-                "grails.plugin.mail",
-                "au.org.ala"
+//                "grails.app",
+//                "grails.plugin.mail",
+//                "au.org.ala"
         ],
         (TRACE): [
-                "grails.plugin.mail"
+//                "grails.plugin.mail"
         ]
 ].each { level, names -> names.each { name -> logger(name, level) } }
