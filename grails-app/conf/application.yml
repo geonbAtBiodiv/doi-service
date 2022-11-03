@@ -152,14 +152,14 @@ security:
         ip:
             whitelist:
     core:
-        uri-filter-pattern: ['/admin', '/admin/*', '/alaAdmin/*', '/doi/*/downloadAuth', '/myDownloads/*']
+        uri-filter-pattern: ['/admin', '/admin/*', '/alaAdmin/*', '/myDownloads/*']
         optional-filter-pattern: ['/*']
         uriExclusionFilterPattern: ['/images.*','/css.*','/js.*','/less.*']
     cas:
         enabled: false
         uriExclusionFilterPattern: ['/images.*','/css.*','/js.*','/less.*']
         authenticateOnlyIfLoggedInFilterPattern: ['/*']
-        uriFilterPattern: ['/admin', '/admin/*', '/alaAdmin/*', '/doi/*/downloadAuth', '/myDownloads/*']
+        uriFilterPattern: ['/admin', '/admin/*', '/alaAdmin/*', '/myDownloads/*']
     oidc:
         enabled: true
         scope: openid profile email ala roles

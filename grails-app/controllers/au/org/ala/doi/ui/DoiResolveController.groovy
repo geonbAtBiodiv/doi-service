@@ -96,16 +96,17 @@ class DoiResolveController extends BasicWSController {
                 if(!requestorId) {
                     // Force authentication for the same download
                     // This method will end up being called again but with an authenticated user.
-                    redirect uri: "/doi/${doi.uuid}/downloadAuth"
+                    redirect uri: authService.loginUrl( "/doi/${doi.uuid}")
                     log.debug("File for DOI ${doi.doi} (uuid = ${doi.uuid}) is not public, user needs to login to see if he is permitted to download it.")
                     return
                 } else if(requestorId != doi.userId) {
-                    UserDetails userDetails = authService.getUserForUserId(requestorId)
-                    if(!userDetails.roles.containsAll(doi.authorisedRoles)) {
-                        //Redirect to not allowed page.
-                        render view: "unauthorisedDownload", model: [doi: doi] //TODO
-                        log.debug("File for DOI ${doi.doi} (uuid = ${doi.uuid}) is not public and user ${requestorId} does not have the apropriate permissions to access it")
-                        return
+                    // must be authorised for all roles
+                    doi.authorisedRoles.each {
+                        if (authService.userInRole(it)) {
+                            render view: "unauthorisedDownload", model: [doi: doi] //TODO
+                            log.debug("File for DOI ${doi.doi} (uuid = ${doi.uuid}) is not public and user ${requestorId} does not have the apropriate permissions to access it")
+                            return
+                        }
                     }
                 }
             }
